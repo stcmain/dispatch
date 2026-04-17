@@ -12,6 +12,18 @@ All notable changes to `dispatch-cli` are documented here. Format follows
 - Homebrew tap published
 - PyPI release
 
+## [0.1.1] — 2026-04-17
+
+### Fixed
+- `routes_path` now falls back to `<workspace>/.dispatch/routes.json` when the
+  workspace root has no `routes.json`. Previously, `dispatch init <dir>` wrote
+  routes inside `.dispatch/` but the runtime only looked at the workspace root,
+  so every fresh install crashed with `FileNotFoundError` on first classify.
+
+### Tests
+- Added `tests/test_paths.py` covering both lookup orderings + fallback.
+- 47 tests pass across 8 Python × OS matrix.
+
 ## [0.1.0] — 2026-04-16
 
 ### Added
@@ -33,5 +45,6 @@ All notable changes to `dispatch-cli` are documented here. Format follows
 ### Tests
 - 17 pytest tests across classify, supercharge, inbox, CLI (all passing)
 
-[Unreleased]: https://github.com/shifttheculture/dispatch/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/shifttheculture/dispatch/releases/tag/v0.1.0
+[Unreleased]: https://github.com/stcmain/dispatch/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/stcmain/dispatch/releases/tag/v0.1.1
+[0.1.0]: https://github.com/stcmain/dispatch/releases/tag/v0.1.0
