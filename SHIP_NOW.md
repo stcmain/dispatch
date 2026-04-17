@@ -1,13 +1,16 @@
-# SHIP_NOW — dispatch-cli 0.1.0
+# SHIP_NOW — dispatch-cli 0.1.1
 
-**Status: SHIPPED to GitHub Releases.** v0.1.0 live as of 2026-04-17.
+**Status: SHIPPED to GitHub Releases + WIRED to JARVIS.** v0.1.1 live as of 2026-04-17.
 
 ## Live right now
 
 - Repo: https://github.com/stcmain/dispatch
-- Release: https://github.com/stcmain/dispatch/releases/tag/v0.1.0
-- Wheel: `dispatch_cli-0.1.0-py3-none-any.whl` attached
-- Sdist: `dispatch_cli-0.1.0.tar.gz` attached
+- Release: https://github.com/stcmain/dispatch/releases/tag/v0.1.1
+- Wheel: `dispatch_cli-0.1.1-py3-none-any.whl` attached
+- Sdist: `dispatch_cli-0.1.1.tar.gz` attached
+- Installed locally: `~/.dispatch-venv/bin/dispatch` (PATH shim: `~/bin/dispatch`, `~/bin/dispatch-watch`)
+- Workspace: `~/Desktop/JARVIS_EMPIRE` (routes.json at root, scaffold at `.dispatch/`)
+- Bridge: `scripts/dispatch_bridge.py` wires 16 categories → existing JARVIS agents
 - CI: matrix py3.10–3.13 green
 
 Install command anyone can run today:
