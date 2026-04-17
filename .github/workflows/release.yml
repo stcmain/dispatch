@@ -47,6 +47,7 @@ jobs:
   publish-pypi:
     needs: build
     runs-on: ubuntu-latest
+    continue-on-error: true  # don't block the GitHub release if PyPI isn't wired up yet
     environment:
       name: pypi
       url: https://pypi.org/p/dispatch-cli
@@ -59,7 +60,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   github-release:
-    needs: publish-pypi
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
