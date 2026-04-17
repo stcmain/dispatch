@@ -20,9 +20,9 @@ gh auth login --web --git-protocol https --hostname github.com
 
 It prints a one-time code — paste into the browser tab.
 
-### 2. Create `shifttheculture/dispatch` repo
+### 2. Create `stcmain/dispatch` repo
 
-Tab: `github.com/organizations/shifttheculture/repositories/new`
+Tab: `github.com/organizations/stcmain/repositories/new`
 
 - Name: `dispatch`
 - Description: `Hub-and-spoke AI dispatcher — classify → supercharge → fanout`
@@ -32,7 +32,7 @@ Tab: `github.com/organizations/shifttheculture/repositories/new`
 Then, from `~/Desktop/JARVIS_EMPIRE/dispatcher`:
 
 ```bash
-git remote add origin git@github.com:shifttheculture/dispatch.git
+git remote add origin https://github.com/stcmain/dispatch.git
 git push -u origin main
 git tag v0.1.0 && git push origin v0.1.0
 ```
@@ -49,7 +49,7 @@ Fill the **pending publisher** form:
 | Field | Value |
 |---|---|
 | PyPI project name | `dispatch-cli` |
-| Owner | `shifttheculture` |
+| Owner | `stcmain` |
 | Repository | `dispatch` |
 | Workflow filename | `release.yml` |
 | Environment name | `pypi` |
@@ -68,7 +68,7 @@ Then after v0.1.0 hits PyPI:
 
 ```bash
 cd /tmp
-git clone git@github.com:shifttheculture/homebrew-dispatch.git
+git clone https://github.com/stcmain/homebrew-dispatch.git
 cp ~/Desktop/JARVIS_EMPIRE/dispatcher/packaging/homebrew/dispatch.rb \
    homebrew-dispatch/Formula/dispatch.rb
 cd homebrew-dispatch
@@ -80,7 +80,7 @@ git push
 Users then get it via:
 
 ```bash
-brew tap shifttheculture/dispatch
+brew tap stcmain/dispatch
 brew install dispatch
 ```
 
