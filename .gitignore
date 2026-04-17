@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.pyright/
+.ruff_cache/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dispatch workspace state (keep templates, ignore per-user runtime)
+BROADCAST.md
+INBOX_*.md
+dispatch_log.jsonl
+heartbeat.log
+context_cache.json
+
+# RTK
+.rtk/
+
+# Internal agent instructions — not for public repo
+CLAUDE.md
+
+# Secrets
+.env
+.env.*
+!.env.example
