@@ -30,7 +30,15 @@ def workspace_file(name: str, workspace: Path | None = None) -> Path:
 
 
 def routes_path(workspace: Path | None = None) -> Path:
-    return _resolve(workspace) / "routes.json"
+    """Resolve routes.json, preferring workspace root, falling back to .dispatch/."""
+    base = _resolve(workspace)
+    root = base / "routes.json"
+    if root.exists():
+        return root
+    nested = base / ".dispatch" / "routes.json"
+    if nested.exists():
+        return nested
+    return root
 
 
 def context_cache_path(workspace: Path | None = None) -> Path:
