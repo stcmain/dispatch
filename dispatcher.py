@@ -1,73 +1,30 @@
 #!/usr/bin/env python3
-"""
-dispatcher.py — STC JARVIS Dispatcher
-Reads a short raw message, classifies it, supercharges it with relevant context,
-and outputs a ready-to-use prompt for any agent.
+"""Legacy shim for dispatcher.py — delegates to the ``dispatch`` package.
 
-Usage:
-    python3 dispatcher.py "fix the website"
-    echo "place bets" | python3 dispatcher.py
+Maintains the exact console output and logging format of the original
+script while using the refactored logic in ``src/dispatch``.
 """
 
-import json
+from __future__ import annotations
+
+import datetime
 import os
 import sys
-import datetime
-from typing import Optional
+from pathlib import Path
 
-from supercharge import supercharge, load_json
+# Add src/ to path so we can import the dispatch package
+_SRC = Path(__file__).resolve().parent / "src"
+if str(_SRC) not in sys.path:
+    sys.path.insert(0, str(_SRC))
 
-
-ROUTES_PATH = os.path.join(os.path.dirname(__file__), "routes.json")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "dispatch_log.jsonl")
-
-
-# --- CLASSIFIER ---
-
-CATEGORY_KEYWORDS = {}
-
-def load_keywords() -> dict[str, list[str]]:
-    routes = load_json(ROUTES_PATH)
-    return {cat: data.get("keywords", []) for cat, data in routes.items()}
-
-
-def classify(message: str) -> str:
-    keywords = load_keywords()
-    message_lower = message.lower()
-    scores: dict[str, int] = {}
-
-    for category, kw_list in keywords.items():
-        score = sum(1 for kw in kw_list if kw in message_lower)
-        if score > 0:
-            scores[category] = score
-
-    if not scores:
-        # Fallback heuristics
-        if any(w in message_lower for w in ["site", "page", "build", "run", "error"]):
-            return "CODE"
-        if any(w in message_lower for w in ["post", "write", "draft"]):
-            return "CONTENT"
-        return "OPS"
-
-    return max(scores, key=lambda c: scores[c])
-
-
-# --- LOGGER ---
-
-def log_dispatch(entry: dict) -> None:
-    with open(LOG_PATH, "a") as f:
-        f.write(json.dumps(entry) + "\n")
-
-
-# --- MAIN ---
-
-def read_input() -> str:
-    if len(sys.argv) > 1:
-        return " ".join(sys.argv[1:]).strip()
-    if not sys.stdin.isatty():
-        return sys.stdin.read().strip()
-    print("Usage: python3 dispatcher.py \"your message\"")
-    print("       echo \"your message\" | python3 dispatcher.py")
+try:
+    from dispatch.core.classify import classify, load_keywords, load_routes
+    from dispatch.core.enrich import _load_cache
+    from dispatch.core.supercharge import supercharge
+    from dispatch.io.log import log_dispatch
+    from dispatch.io.paths import context_cache_path, log_path, routes_path
+except ImportError:
+    print("[ERROR] Could not import 'dispatch' package. Ensure 'src/' is present and dependencies (typer, rich) are installed.")
     sys.exit(1)
 
 
@@ -79,35 +36,61 @@ def print_header(label: str) -> None:
 
 
 def main() -> None:
-    raw_message = read_input()
+    if len(sys.argv) > 1:
+        raw_message = " ".join(sys.argv[1:]).strip()
+    elif not sys.stdin.isatty():
+        raw_message = sys.stdin.read().strip()
+    else:
+        print("Usage: python3 dispatcher.py \"your message\"")
+        print("       echo \"your message\" | python3 dispatcher.py")
+        sys.exit(1)
 
     if not raw_message:
         print("[ERROR] Empty message. Provide a task.")
         sys.exit(1)
 
+    # Resolve paths and load data
+    # Support DISPATCH_WORKSPACE env var for the shim too
+    workspace_path = os.environ.get("DISPATCH_WORKSPACE")
+    workspace = Path(workspace_path) if workspace_path else None
+
+    r_path = routes_path(workspace)
+    c_path = context_cache_path(workspace)
+
+    try:
+        routes = load_routes(r_path)
+        cache = _load_cache(c_path)
+    except Exception as exc:
+        print(f"[ERROR] Failed to load configuration: {exc}")
+        print(f"  Checked routes at: {r_path}")
+        sys.exit(1)
+
+    keywords = load_keywords(routes)
+
     # Classify
-    category = classify(raw_message)
+    category = classify(raw_message, keywords)
 
     # Supercharge
-    result = supercharge(raw_message, category)
+    result = supercharge(raw_message, category, routes, cache)
 
     # Log
     log_entry = {
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "raw_input": raw_message,
-        "category": category,
+        "category": result["category"],
         "agent": result["agent"],
         "supercharged_prompt": result["supercharged_prompt"],
         "token_stats": result["token_stats"]
     }
-    log_dispatch(log_entry)
+    l_path = log_path(workspace)
+    log_dispatch(log_entry, l_path)
 
     # Output
     stats = result["token_stats"]
 
     print_header("STC DISPATCHER")
     print(f"  RAW INPUT    : {raw_message}")
-    print(f"  CATEGORY     : {category}")
+    print(f"  CATEGORY     : {result['category']}")
     print(f"  AGENT        : {result['agent']}")
     print(f"  CWD          : {result['cwd']}")
     print()
@@ -122,7 +105,7 @@ def main() -> None:
     print(result["supercharged_prompt"])
     print()
     print("=" * 60)
-    print(f"  Logged to: {LOG_PATH}")
+    print(f"  Logged to: {l_path}")
     print("=" * 60)
 
 
