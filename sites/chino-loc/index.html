@@ -117,22 +117,22 @@ section{padding-block:clamp(56px,9vw,112px)}
 .spotlight .info{display:flex;flex-direction:column;gap:14px;min-width:0}
 .spotlight h3{font-family:var(--head);font-size:clamp(34px,4.6vw,56px);line-height:.95;text-transform:uppercase}
 .platforms{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:40px}
+.catalog{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-top:40px}
+.catalog.videos{grid-template-columns:repeat(3,minmax(0,1fr))}
 .card{position:relative;border:1px solid var(--line);background:var(--bg-2);transform-style:preserve-3d;will-change:transform;text-decoration:none;color:inherit;display:block;min-width:0}
 .card img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
 .card.video img{aspect-ratio:16/9}
 .glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(200,228,255,.18),transparent 46%);opacity:0;transition:opacity .2s}
 .card:hover .glare{opacity:1}
 .card .meta{padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px}
-.card .meta strong{font:600 16px/1.3 var(--body)}
+.card .meta strong{font:600 15px/1.3 var(--body);overflow-wrap:anywhere}
 .card .meta span{font-size:13px;color:var(--muted)}
 .card .soon{position:absolute;top:12px;right:12px;background:rgba(6,9,18,.7)}
 .play{position:absolute;left:50%;top:50%;width:64px;height:64px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(6,9,18,.65);border:1px solid rgba(232,240,255,.35);display:flex;align-items:center;justify-content:center;pointer-events:none}
 .play::after{content:"";border-style:solid;border-width:11px 0 11px 19px;border-color:transparent transparent transparent var(--fg);margin-left:4px}
 .card.video .play{top:calc((100% - 72px)/2)}
 .note{margin-top:22px;color:var(--muted);font-size:14px}
-@media (max-width:880px){.catalog{grid-template-columns:1fr}.spotlight{grid-template-columns:1fr}}
-@media (min-width:881px) and (max-width:1024px){.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:880px){.catalog{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.catalog.videos{grid-template-columns:1fr}.spotlight{grid-template-columns:1fr}}
 
 /* shows */
 .table-wrap{overflow-x:auto;border:1px solid var(--line)}
@@ -247,7 +247,7 @@ footer p a{color:var(--muted)}
       <div class="spotlight" id="spotlight" data-reveal></div>
       <div class="platforms" id="platforms" data-reveal></div>
       <div class="catalog" id="catalog"></div>
-      <p class="note">Catalog populates as drops land.</p>
+      <p class="note" id="catalogNote">Catalog populates as drops land.</p>
     </div>
   </section>
 
@@ -257,7 +257,7 @@ footer p a{color:var(--muted)}
         <p class="eyebrow">Videos</p>
         <h2>Watch</h2>
       </div>
-      <div class="catalog" id="videoGrid" style="margin-top:0"></div>
+      <div class="catalog videos" id="videoGrid" style="margin-top:0"></div>
     </div>
   </section>
 
@@ -370,13 +370,26 @@ const CONFIG = {
     presave: "#",                                        // pre-save link
     seed: 7
   },
-  catalog: [                                             // VERIFIED: Pak Pak releases featuring Chino Loc (Spotify album pages)
-    { title: "Got Me A Knot",     credit: "Pak Pak × Chino Loc × Breadwinna Bull", year: "2025", url: "https://open.spotify.com/album/6pN1UG8qyKsRyDMTLf2Fj3", seed: 3 },
-    { title: "Left Alone",        credit: "Pak Pak × Chino Loc",                   year: "2025", url: "https://open.spotify.com/album/6pabOzFwae0rUzHhabePya", seed: 5 },
-    { title: "Too Greasy (Remix)",credit: "Pak Pak × Chino Loc & more",            year: "2024", url: "https://open.spotify.com/album/1MRQMiMOJR47uUBgxYZ6SN", seed: 9 }
+  catalog: [                                             // VERIFIED: read off his public Spotify artist page (releases + appears-on), 2026-10-16
+    { title: "Block Bender", credit: "Rob da Bank × Chino Loc", year: "2026", kind: "release", url: "https://open.spotify.com/album/0zexPlB9w8dSnE6AjdQyLc", art: "art/0zexPlB9w8dSnE6AjdQyLc.jpg" },
+    { title: "iDoTh!sALL4u", credit: "Skooba Steve × Chino Loc", year: "2025", kind: "appears", url: "https://open.spotify.com/album/1pZn09mupnd3Q8eCg8MDTq", art: "art/1pZn09mupnd3Q8eCg8MDTq.jpg" },
+    { title: "Got Me A Knot", credit: "Breadwinna Bull × Chino Loc × Pak Pak", year: "2025", kind: "release", url: "https://open.spotify.com/album/6pN1UG8qyKsRyDMTLf2Fj3", art: "art/6pN1UG8qyKsRyDMTLf2Fj3.jpg" },
+    { title: "60 Shades Of Blue", credit: "Chino Loc", year: "2025", kind: "release", url: "https://open.spotify.com/album/3FxwEidLIbQUXS9wsxJaci", art: "art/3FxwEidLIbQUXS9wsxJaci.jpg" },
+    { title: "84s Pokin Out", credit: "Chino Loc", year: "2025", kind: "release", url: "https://open.spotify.com/album/5WJtoD5J9SFuTVkFKPylPc", art: "art/5WJtoD5J9SFuTVkFKPylPc.jpg" },
+    { title: "No Love Left", credit: "P KILLA × Chino Loc", year: "2025", kind: "appears", url: "https://open.spotify.com/album/3ICbItgQrJJdDhepiUhr4l", art: "art/3ICbItgQrJJdDhepiUhr4l.jpg" },
+    { title: "Long Way From Home (feat. Mr.Chicken, E.S.G. & Chino Loc)", credit: "Itsbizkit × Chino Loc", year: "2025", kind: "appears", url: "https://open.spotify.com/album/4vRUUNl2O1oNMviJcDhsz8", art: "art/4vRUUNl2O1oNMviJcDhsz8.jpg" },
+    { title: "Left Alone", credit: "Chino Loc × Pak Pak", year: "2025", kind: "release", url: "https://open.spotify.com/album/6pabOzFwae0rUzHhabePya", art: "art/6pabOzFwae0rUzHhabePya.jpg" },
+    { title: "Scared Love", credit: "Chino Loc", year: "2024", kind: "release", url: "https://open.spotify.com/album/5l06XnqyQPUMr3VM7JgYO8", art: "art/5l06XnqyQPUMr3VM7JgYO8.jpg" },
+    { title: "Too Greasy (Remix)", credit: "Chino Loc × Digital Beans × Pak Pak × Papi Yari × Quin Nfn × Sauve", year: "2024", kind: "appears", url: "https://open.spotify.com/album/1MRQMiMOJR47uUBgxYZ6SN", art: "art/1MRQMiMOJR47uUBgxYZ6SN.jpg" },
+    { title: "LLECA", credit: "Sicario × Chino Loc", year: "2024", kind: "appears", url: "https://open.spotify.com/album/4WhpmscDxbP9S9UgLyo1nM", art: "art/4WhpmscDxbP9S9UgLyo1nM.jpg" },
+    { title: "ROLL CALL", credit: "3rdeye × 53Rich × Chino Loc × MEZ × Pak Pak × Quin Nfn × Sauve", year: "2024", kind: "appears", url: "https://open.spotify.com/album/4YYEwe61Pw8CWKTRbsglRc", art: "art/4YYEwe61Pw8CWKTRbsglRc.jpg" },
+    { title: "BUILT DIFFERENT", credit: "Chino Loc × Digital Beans × Pak Pak", year: "2024", kind: "release", url: "https://open.spotify.com/album/5lKKvJ7FHqGgRn6bUEWnn2", art: "art/5lKKvJ7FHqGgRn6bUEWnn2.jpg" },
+    { title: "Dat Meskin Down Souf2", credit: "Young Clean × Chino Loc", year: "2022", kind: "appears", url: "https://open.spotify.com/album/4dazCOjwRcvA9RVYnIONrd", art: "art/4dazCOjwRcvA9RVYnIONrd.jpg" },
+    { title: "Hurry up and Buy Music Group, Vol. One", credit: "Various Artists · with Chino Loc", year: "2020", kind: "appears", url: "https://open.spotify.com/album/2EV5rkIVu7qRJCVfsMRKz1", art: "art/2EV5rkIVu7qRJCVfsMRKz1.jpg" },
+    { title: "Against the Grain", credit: "Chino Loc", year: "2020", kind: "release", url: "https://open.spotify.com/album/1NiOvOdrod0muCZd1vsOOt", art: "art/1NiOvOdrod0muCZd1vsOOt.jpg" }
   ],
   videos: [
-    { title: "84s Pokin Out (ft. E.S.G)", note: "Official video", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", seed: 11 }, // VERIFIED (his bio link)
+    { title: "84s Pokin Out (ft. E.S.G)", note: "Official video", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", thumb: "art/yt-UlfKmnCxudk.jpg", seed: 11 }, // VERIFIED (his bio link)
     { title: "Video 02 · Title TBA",      note: "Coming soon",    url: "#", seed: 13 },
     { title: "Video 03 · Title TBA",      note: "Coming soon",    url: "#", seed: 17 }
   ]
@@ -429,11 +442,26 @@ function paintArtwork() {
   });
 }
 
+/* real artwork when CONFIG has it, generated placeholder otherwise */
+function cover(item, w, h, altPrefix) {
+  const src = item.art || item.thumb;
+  return src
+    ? `<img src="${esc(src)}" width="${w}" height="${h}" loading="lazy" decoding="async" alt="${altPrefix} ${esc(item.title)}">`
+    : `<img data-seed="${item.seed || 1}" data-label="${esc(item.title)}" data-w="${w}" data-h="${h}" width="${w}" height="${h}" alt="${altPrefix} placeholder for ${esc(item.title)}">`;
+}
+
 /* ---------- render CONFIG ---------- */
 function render() {
-  const L = CONFIG.latest;
-  $("#spotlight").innerHTML = `
-    <img data-seed="${L.seed}" data-label="${esc(L.title)}" data-w="600" data-h="600" width="600" height="600" alt="Cover art placeholder for ${esc(L.title)}">
+  const L = CONFIG.latest, S = CONFIG.catalog.find(r => r.art);
+  $("#spotlight").innerHTML = S ? `
+    ${cover(S, 640, 640, "Cover art for")}
+    <div class="info">
+      <p class="small">Latest release · ${esc(S.year)}</p>
+      <h3>${esc(S.title)}</h3>
+      <p class="muted">${esc(S.credit)}</p>
+      <div class="ctas"><a class="btn btn-primary" ${linkAttrs(S.url)}>Listen on Spotify</a><a class="btn btn-ghost" ${linkAttrs(L.presave)}>Pre-save the next single ${soonPill(L.presave)}</a></div>
+    </div>` : `
+    ${cover(L, 600, 600, "Cover art")}
     <div class="info">
       <p class="small">${esc(L.note)} · ${esc(L.year)}</p>
       <h3>${esc(L.title)}</h3>
@@ -446,7 +474,7 @@ function render() {
 
   $("#catalog").innerHTML = CONFIG.catalog.map(r => `
     <a class="card tilt" ${linkAttrs(r.url)}>
-      <img data-seed="${r.seed}" data-label="${esc(r.title)}" data-w="600" data-h="600" width="600" height="600" alt="Cover art placeholder for ${esc(r.title)}">
+      ${cover(r, 640, 640, "Cover art for")}
       <div class="glare"></div>
       ${soonPill(r.url)}
       <div class="meta"><strong>${esc(r.title)}</strong><span>${esc(r.credit)} · ${esc(r.year)}</span></div>
@@ -454,12 +482,15 @@ function render() {
 
   $("#videoGrid").innerHTML = CONFIG.videos.map(v => `
     <a class="card tilt video" ${linkAttrs(v.url)}>
-      <img data-seed="${v.seed}" data-label="${esc(v.title)}" data-w="640" data-h="360" width="640" height="360" alt="Thumbnail placeholder for ${esc(v.title)}">
+      ${cover(v, 640, 360, "Thumbnail for")}
       <div class="glare"></div>
       <div class="play" aria-hidden="true"></div>
       ${soonPill(v.url)}
       <div class="meta"><strong>${esc(v.title)}</strong><span>${esc(v.note || "")}</span></div>
     </a>`).join("");
+
+  const real = CONFIG.catalog.filter(r => r.art).length;
+  if (real) $("#catalogNote").textContent = `${real} release${real === 1 ? "" : "s"} on Spotify. More as drops land.`;
 
   $("#socials").innerHTML = CONFIG.socials.map(s =>
     `<li><a class="pill" ${linkAttrs(s.url)}>${esc(s.name)} ${soonPill(s.url)}</a></li>`).join("");
@@ -664,14 +695,14 @@ function stcFace() {
   return c;
 }
 
-/* ---------- hero: chrome chain, CL pendant, sapphire flakes ---------- */
+/* ---------- hero: chrome chain, bead ring, halo chain, swinging CL pendant, two flake layers ---------- */
 function heroScene() {
   const canvas = $("#heroCanvas"), hero = $("#hero");
   if (!has3D) return;
   let renderer;
   try { renderer = makeRenderer(canvas); } catch (_) { return; }
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x060912, .045);
+  scene.fog = new THREE.FogExp2(0x060912, .04);
   const camera = new THREE.PerspectiveCamera(40, 1, .1, 100);
   camera.position.z = 15;
 
@@ -687,60 +718,117 @@ function heroScene() {
   for (let i = 0; i < 12; i++) { const a = Math.PI + i / 12 * Math.PI; add(Math.cos(a) * R, -h + Math.sin(a) * R); }
   const curve = new THREE.CatmullRomCurve3(pts, true, "centripetal");
   const linkGeo = new THREE.TubeGeometry(curve, 96, .13, 20, true);
+  const thinGeo = new THREE.TubeGeometry(curve, 64, .085, 14, true);
+
+  /* a ring of interlocking links; each link keeps its base twist so the loop can add motion on top */
+  function ring(count, pitch, geo, mat) {
+    const g = new THREE.Group(), Rr = count * pitch / (2 * Math.PI), links = [];
+    for (let i = 0; i < count; i++) {
+      const pivot = new THREE.Group(); pivot.rotation.z = i / count * Math.PI * 2;
+      const link = new THREE.Mesh(geo, mat); link.position.x = Rr; link.rotation.y = i * Math.PI / 2;
+      link.userData = { base: i * Math.PI / 2, spin: 0, theta: pivot.rotation.z };
+      pivot.add(link); g.add(pivot); links.push(link);
+    }
+    g.userData = { R: Rr, links };
+    return g;
+  }
 
   const group = new THREE.Group();
-  const necklace = new THREE.Group();
-  const N = 30, pitch = 1.05, Rc = N * pitch / (2 * Math.PI);
-  for (let i = 0; i < N; i++) {
-    const pivot = new THREE.Group(); pivot.rotation.z = i / N * Math.PI * 2;
-    const link = new THREE.Mesh(linkGeo, chrome); link.position.x = Rc; link.rotation.y = i * Math.PI / 2;
-    pivot.add(link); necklace.add(pivot);
-  }
+  const necklace = ring(30, 1.05, linkGeo, chrome);
+  const Rc = necklace.userData.R;
   group.add(necklace);
 
-  const bail = new THREE.Mesh(new THREE.TorusGeometry(.38, .11, 16, 40), sapphire);
-  bail.position.set(0, -Rc - .3, 0);
-  group.add(bail);
-  const faceCanvas = pendantFace();
-  const faceTex = canvasTex(faceCanvas);
-  const pendant = coin(1.3, .18, sapphire, faceTex);
-  pendant.position.set(0, -Rc - 1.95, 0);
-  group.add(pendant);
+  /* halo: a larger, thinner chain sitting behind and tilted, so the hero has depth through the fog */
+  const halo = ring(44, 1.05, thinGeo, chrome);
+  halo.scale.setScalar(1.3); halo.position.z = -5.5; halo.rotation.x = .6;
+  group.add(halo);
+
+  /* bead ring: small sapphire beads orbiting inside the main chain, counter-rotating */
+  const beads = new THREE.Group(), beadGeo = new THREE.SphereGeometry(.15, 16, 12), beadN = 48;
+  for (let i = 0; i < beadN; i++) {
+    const b = new THREE.Mesh(beadGeo, sapphire), a = i / beadN * Math.PI * 2;
+    b.position.set(Math.cos(a) * (Rc - 1.15), Math.sin(a) * (Rc - 1.15), 0); beads.add(b);
+  }
+  beads.rotation.x = -.35;
+  group.add(beads);
+
+  /* pendant hangs from its own pivot at the bottom of the ring so it can swing */
+  const swing = new THREE.Group(); swing.position.set(0, -Rc + .25, 0);
+  const bail = new THREE.Mesh(new THREE.TorusGeometry(.38, .11, 16, 40), sapphire); bail.position.y = -.55;
+  const faceCanvas = pendantFace(), faceTex = canvasTex(faceCanvas);
+  const pendant = coin(1.3, .18, sapphire, faceTex); pendant.position.y = -2.2;
+  swing.add(bail, pendant);
+  group.add(swing);
   scene.add(group);
 
+  /* two flake layers at different depths: parallax as the camera and pointer move */
   const mobile = innerWidth < 760;
-  const dust = flakes(mobile ? 600 : 1500);
-  scene.add(dust);
+  const near = flakes(mobile ? 260 : 650); near.material.size = .12; near.position.z = 4;
+  const far = flakes(mobile ? 340 : 900); far.material.size = .07; far.material.opacity = .5; far.position.z = -7;
+  scene.add(near, far);
 
-  const state = { rz: 0, cz: 15, px: 0, py: 0, tx: 0, ty: 0 };
+  const state = { rz: 0, rx: 0, cz: 15, px: 0, py: 0, tx: 0, ty: 0, active: 0, tActive: 0 };
   function layout() {
     const w = hero.clientWidth, hgt = hero.clientHeight;
     renderer.setSize(w, hgt, false);
     camera.aspect = w / hgt; camera.updateProjectionMatrix();
     const wide = w > 900;
     group.position.set(wide ? 2.5 : 0, wide ? 1.25 : 1.5, 0);
-    const s = wide ? .72 : (w < 560 ? .56 : .64);
-    group.scale.setScalar(s);
+    group.scale.setScalar(wide ? .72 : (w < 560 ? .56 : .64));
   }
   layout();
 
   if (hasGsap && !reduced) {
-    gsap.to(state, { rz: Math.PI / 2, cz: 21, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
+    gsap.to(state, { rz: Math.PI / 2, rx: .85, cz: 21, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
+    /* intro: links fly in from outside the ring and unspin into place, pendant drops, beads grow */
+    necklace.userData.links.forEach((l, i) => {
+      l.position.x = Rc + 5 + Math.random() * 5; l.userData.spin = Math.PI * 2;
+      gsap.to(l.position, { x: Rc, duration: 1.5, ease: "power3.out", delay: .05 + i * .025 });
+      gsap.to(l.userData, { spin: 0, duration: 1.6, ease: "power2.out", delay: .05 + i * .025 });
+    });
+    halo.userData.links.forEach((l, i) => { l.userData.spin = Math.PI; gsap.to(l.userData, { spin: 0, duration: 1.8, ease: "power2.out", delay: .3 + i * .012 }); });
+    swing.position.y += 3.5; gsap.to(swing.position, { y: -Rc + .25, duration: 1.7, ease: "elastic.out(1, .45)", delay: .9 });
+    beads.scale.setScalar(.001); gsap.to(beads.scale, { x: 1, y: 1, z: 1, duration: 1.2, ease: "back.out(1.6)", delay: .6 });
   }
   if (finePointer && !reduced) {
-    addEventListener("pointermove", e => { state.tx = (e.clientX / innerWidth - .5) * 2; state.ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+    addEventListener("pointermove", e => {
+      const r = hero.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width * 2 - 1, ny = -((e.clientY - r.top) / r.height * 2 - 1);
+      const inside = nx >= -1 && nx <= 1 && ny >= -1 && ny <= 1;
+      state.tActive = inside ? 1 : 0;
+      if (inside) { state.tx = nx; state.ty = ny; }
+    }, { passive: true });
   }
 
+  const centre = new THREE.Vector3();
+  const wrapAngle = a => Math.atan2(Math.sin(a), Math.cos(a));
   let t0 = performance.now();
   function update(now) {
     const t = (now - t0) / 1000;
-    state.px += (state.tx - state.px) * .04; state.py += (state.ty - state.py) * .04;
-    group.rotation.y = Math.sin(t * .22) * .42 + state.px * .28;
-    group.rotation.x = Math.sin(t * .17) * .12 + state.py * .18;
+    state.px += (state.tx - state.px) * .05; state.py += (state.ty - state.py) * .05;
+    state.active += (state.tActive - state.active) * .06;
+
+    group.rotation.y = Math.sin(t * .22) * .42 + state.px * .3;
+    group.rotation.x = Math.sin(t * .17) * .1 + state.py * .2 + state.rx;
     group.rotation.z = state.rz;
-    pendant.rotation.y = t * .5;
-    dust.rotation.y = t * .02; dust.position.y = Math.sin(t * .2) * .4;
-    camera.position.z = state.cz;
+
+    /* where is the pointer around the ring? compare each link's angle to it and let nearby links twist + swell */
+    group.getWorldPosition(centre).project(camera);
+    const pa = Math.atan2(state.py - centre.y, (state.px - centre.x) * camera.aspect);
+    necklace.userData.links.forEach((l, i) => {
+      const d = wrapAngle(l.userData.theta + state.rz - pa);
+      const near = Math.exp(-(d * d) / .22) * state.active;
+      l.rotation.y = l.userData.base + l.userData.spin + Math.sin(t * 1.4 + i * .45) * .2 + near * 1.1;
+      const sc = 1 + near * .16; l.scale.set(sc, sc, sc);
+    });
+    halo.userData.links.forEach((l, i) => { l.rotation.y = l.userData.base + l.userData.spin + Math.sin(t * .9 + i * .3) * .15; });
+    halo.rotation.z = t * .07; halo.rotation.y = Math.sin(t * .15) * .18;
+    beads.rotation.z = -t * .28;
+    swing.rotation.z = Math.sin(t * 1.15) * .13 + state.px * .22;
+    pendant.rotation.y = t * .6;
+    near.rotation.y = t * .025; near.position.x = state.px * .9; near.position.y = Math.sin(t * .2) * .4 + state.py * .6;
+    far.rotation.y = -t * .012; far.position.x = state.px * .3;
+    camera.position.z = state.cz; camera.position.x = Math.sin(t * .11) * .25;
   }
   function draw() { renderer.render(scene, camera); }
 
