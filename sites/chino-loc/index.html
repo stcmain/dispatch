@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chino Loc</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Chino Loc. Officially signed to Shift The Culture, 2026. Music, videos, shows, and the list.">
+<meta name="description" content="Chino Loc × Shift The Culture. Music, videos, shows, and the list.">
 <meta name="theme-color" content="#090609">
 <meta property="og:title" content="Chino Loc">
-<meta property="og:description" content="Officially signed to Shift The Culture. New era loading.">
+<meta property="og:description" content="Chino Loc × Shift The Culture. New era loading.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,7 +204,7 @@ footer p a{color:var(--muted)}
     <div class="wrap">
       <p class="eyebrow">Shift The Culture presents</p>
       <h1>Chino Loc</h1>
-      <p class="sub">Officially signed. New era loading.</p>
+      <p class="sub">New era loading.</p>
       <div class="ctas">
         <a class="btn btn-primary" id="listenNow" href="#music">Listen now</a>
         <a class="btn btn-ghost" href="#contact">Join the list</a>
@@ -214,23 +214,23 @@ footer p a{color:var(--muted)}
 
   <div class="marquee" aria-hidden="true">
     <div class="track">
-      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span></div>
-      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span></div>
+      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Austin, Texas <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Austin, Texas <b>•</b></span></div>
+      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Austin, Texas <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Austin, Texas <b>•</b></span></div>
     </div>
   </div>
 
-  <section class="deal" id="deal">
+  <section class="deal" id="team">
     <div class="wrap grid">
       <div class="coin-wrap" id="coinWrap">
         <canvas id="coinCanvas" aria-hidden="true"></canvas>
         <div class="coin-fallback" aria-hidden="true">STC</div>
       </div>
       <div class="copy" data-reveal>
-        <p class="eyebrow">The deal</p>
-        <h2>Chino Loc <em>×</em> Shift The Culture.<br>Officially signed, 2026.</h2>
+        <p class="eyebrow">The team</p>
+        <h2>Chino Loc <em>×</em> Shift The Culture.</h2>
         <p class="lede">Records, visuals, rollout and a platform of his own. One team behind every drop, from the studio to the stage, so the music travels further than the feed.</p>
         <ul class="ticks">
-          <li>Debut single under Shift The Culture</li>
+          <li>Debut single with Shift The Culture</li>
           <li>Visuals for every record</li>
           <li>Live dates, announced here first</li>
         </ul>
@@ -287,7 +287,7 @@ footer p a{color:var(--muted)}
     <div class="wrap grid">
       <div data-reveal>
         <p class="eyebrow" id="storyEyebrow">Story</p>
-        <blockquote>A new name on the Shift The Culture roster.</blockquote>
+        <blockquote>A new chapter with Shift The Culture.</blockquote>
       </div>
       <div class="copy" data-reveal>
         <p class="lede">Chino Loc arrives with a sound of his own and a team built to take it everywhere. The first chapter starts with the debut single and the visuals behind it. Everything after that lands here.</p>
@@ -365,7 +365,7 @@ const CONFIG = {
   ],
   latest: {
     title: "Title TBA",
-    note: "Debut single under Shift The Culture",
+    note: "Debut single with Shift The Culture",
     year: "2026",
     presave: "#",                                        // pre-save link
     seed: 7
@@ -464,7 +464,7 @@ function render() {
   $("#socials").innerHTML = CONFIG.socials.map(s =>
     `<li><a class="pill" ${linkAttrs(s.url)}>${esc(s.name)} ${soonPill(s.url)}</a></li>`).join("");
 
-  $("#copyright").innerHTML = `© ${CONFIG.year} ${esc(CONFIG.artist)}. A <a href="${esc(CONFIG.labelUrl)}" target="_blank" rel="noopener">${esc(CONFIG.label)}</a> artist.`;
+  $("#copyright").innerHTML = `© ${CONFIG.year} ${esc(CONFIG.artist)}. Presented by <a href="${esc(CONFIG.labelUrl)}" target="_blank" rel="noopener">${esc(CONFIG.label)}</a>.`;
   if (CONFIG.city) $("#storyEyebrow").textContent = CONFIG.city;
   if (!isPlaceholder(CONFIG.listen)) { const a = $("#listenNow"); a.href = CONFIG.listen; a.target = "_blank"; a.rel = "noopener"; }
 
@@ -650,7 +650,7 @@ function stcFace() {
   x.strokeStyle = "rgba(58,42,10,.6)";
   [[.47, 8], [.44, 3], [.33, 6], [.305, 2]].forEach(([r, w]) => { x.lineWidth = w; x.beginPath(); x.arc(cx, cx, S * r, 0, Math.PI * 2); x.stroke(); });
   x.fillStyle = "#3a2a0a"; x.textAlign = "center"; x.textBaseline = "middle";
-  const text = "SHIFT THE CULTURE ★ OFFICIAL ROSTER ★ ";
+  const text = "SHIFT THE CULTURE ★ CHINO LOC ★ ";
   x.font = `600 ${S * .05}px Archivo, sans-serif`;
   const R = S * .385, n = text.length;
   for (let i = 0; i < n; i++) {
