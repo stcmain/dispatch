@@ -47,7 +47,7 @@ python3 fanout.py "refresh revenue dashboard"
 python3 fanout.py --target code,content "draft 3 captions for futuredigitalmusic"
 
 # Raw mode (skip enrichment — use when you already wrote a full prompt)
-python3 fanout.py --raw --broadcast "switch to cheap tier until credits refresh"
+python3 fanout.py --raw --broadcast "all clear: plan limits roll to paid usage. Stay on default model + settings. Do not switch models."
 ```
 
 The enricher produces 400-700 token prompts from 3-10 word inputs → 60-75% token savings vs full context injection.
@@ -64,7 +64,7 @@ Before each new turn, read ~/Desktop/JARVIS_EMPIRE/dispatcher/BROADCAST.md
 and ~/Desktop/JARVIS_EMPIRE/dispatcher/INBOX_<MY_NAME>.md if it exists.
 If either was updated since last turn, execute its instructions.
 After completion, append one line to INBOX_STATUS.md:
-  [SESSION_NAME] [ISO_TIMESTAMP] model=<X> task=<short> switched=<yes/no>
+  [SESSION_NAME] [ISO_TIMESTAMP] model=<X> task=<short>
 Never re-fetch a dispatch you already executed (dedup by timestamp in the file).
 ```
 
@@ -107,15 +107,76 @@ The dispatcher enforces the `ai_provider_switcher.chat_tier()` rule for agent sc
 
 1. Agent can't complete → writes reason to `INBOX_STATUS.md` with `blocked=<reason>`
 2. Hub (this session) reads status, re-dispatches with more context OR escalates to ZP via iMessage +12313421454
-3. Agent rate-limited on Anthropic → switch model in-session via `/model`, acknowledge with `switched=yes`
+3. Agent hits plan limit → **continues on paid usage automatically** (usage credits, see USAGE LIMIT POLICY below). If it stops instead: run `/status`, confirm usage credits are enabled and funded (`/usage-credits`), **do NOT switch model.**
 4. LiteLLM proxy down → orchestrator auto-restarts within 15 min, direct fallback chain in `ai_provider_switcher.py` also works
 
 ---
 
-## CURRENT CONSTRAINT (2026-04-16)
+## USAGE LIMIT POLICY (2026-10-16)
 
-- Anthropic API credits: ~$10 shared across 8 agents
-- Default settings: Opus 4.7 + bypass permissions + high effort
-- **Action active in BROADCAST.md** — all sessions directed to switch to Sonnet 4.6/Haiku 4.5 or tier aliases
+**Rule: when a session hits the plan limit, nothing changes.** Same model, same effort, same permission
+mode. Overflow rolls to **usage credits** (the prepaid pay-as-you-go balance on the Claude Max subscription,
+formerly "extra usage") automatically. No downgrade to Sonnet/Haiku. **Cap: $100/month.** The 2026-04-16
+"switch to cheap tier" broadcast is retired.
 
-When credits refresh or increase: update `BROADCAST.md` with "all clear" message and fan out.
+### One-time setup (ZP, local machine)
+
+1. Usage credits: claude.ai → **Settings → Usage → Usage credits → Enable** (`https://claude.ai/settings/usage`,
+   or `/usage-credits` inside any Claude Code session). **Add funds** (prepaid, billed at standard API rates),
+   **Adjust limit** → $100/month, and turn on **auto-reload** so the balance never reaches zero. A zero balance
+   flips credits off on its own (`/status` reports extra usage disabled, reason `out_of_credits`) and every
+   session falls back to waiting for the plan reset.
+2. Pin settings in `~/.claude/settings.json` (user scope = hub + every spoke; `bypassPermissions` is ignored in
+   project-level files, so it has to live here):
+
+   ```json
+   {
+     "model": "claude-fable-5-1",
+     "effortLevel": "high",
+     "permissions": { "defaultMode": "bypassPermissions" }
+   }
+   ```
+
+   `effortLevel` (`low`/`medium`/`high`/`xhigh`) in user settings is honored by Fable 5.1; `/effort` writes
+   per-model overrides to `modelSettings`. Verify in a fresh session with `/status`.
+3. Keep `ANTHROPIC_API_KEY` **unset** in every shell that launches Claude Code (the `claude()` wrapper in
+   `~/.zshrc` already strips it). A set key silently moves the session to Console (API) billing. Check `/status`.
+
+### What happens at the limit
+
+- Credits on and funded: requests past the 5-hour / weekly window bill to usage credits and keep going on the
+  same model. Nothing to do.
+- The first Fable request that bills credits in an interactive session shows a one-time consent prompt → pick
+  **continue on Fable**. Unattended sessions (Remote Control, background, agent-team teammates) hold it for
+  `dialogExpiry` (5 min default) then end the turn, so answer it at the terminal. `-p` runs never ask.
+- Credits off or balance $0: Claude Code blocks at the limit and **auto-continues at reset**
+  (`autoContinueAtUsageLimit`, default on). That is the "it stopped" case → fund credits, do not switch model.
+- Monthly cap reached: `You've hit your monthly spend limit` → raise it at claude.ai Settings → Usage, or
+  answer the in-CLI raise/remove prompt.
+
+### Where to check
+
+| Command | Shows |
+|---------|-------|
+| `/usage` | session + weekly bars, usage-credits spend vs monthly limit (row hidden while credits are off) |
+| `/status` | model, account, login method, setting sources |
+| `/rate-limit-options` | wait / add usage credits / upgrade |
+| `https://claude.ai/settings/usage` | credits on/off, balance, this month's spend, monthly limit |
+
+### Gotchas
+
+- Prompt-cache lifetime drops from 1 hour (subscription) to 5 minutes once a session is drawing on usage
+  credits. Keep spokes busy or restart them lean.
+- Cloud sessions (Claude Code on the web) share the same plan limits and use subscription credentials. The
+  docs (2026-10-16) only state that usage credits cover "Claude conversations and Claude Code terminal usage";
+  cloud coverage is unconfirmed. Confirm on the first cloud limit hit and update this line.
+- Max's included monthly API credits cannot be used for usage credits or in Claude Code.
+- `-p` (print mode) and background sessions never auto-wait; they stop at the limit (credits still apply).
+
+### Rollout
+
+After setup, broadcast to every spoke so the old downgrade rule is dropped:
+
+```bash
+python3 fanout.py --raw --broadcast "all clear: plan limits roll to paid usage. Stay on default model + settings. Do not switch models."
+```
