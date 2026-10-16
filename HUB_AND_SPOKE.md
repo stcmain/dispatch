@@ -107,15 +107,75 @@ The dispatcher enforces the `ai_provider_switcher.chat_tier()` rule for agent sc
 
 1. Agent can't complete → writes reason to `INBOX_STATUS.md` with `blocked=<reason>`
 2. Hub (this session) reads status, re-dispatches with more context OR escalates to ZP via iMessage +12313421454
-3. Agent rate-limited on Anthropic → switch model in-session via `/model`, acknowledge with `switched=yes`
+3. Agent hits the Claude plan usage limit → **do not switch model.** Claude Code either waits and auto-continues at reset, or continues immediately on usage credits (see USAGE LIMIT POLICY below). If it stalls, run `/rate-limit-options` → add usage credits. Acknowledge with `switched=no`.
 4. LiteLLM proxy down → orchestrator auto-restarts within 15 min, direct fallback chain in `ai_provider_switcher.py` also works
 
 ---
 
-## CURRENT CONSTRAINT (2026-04-16)
+## USAGE LIMIT POLICY (2026-10-16)
 
-- Anthropic API credits: ~$10 shared across 8 agents
-- Default settings: Opus 4.7 + bypass permissions + high effort
-- **Action active in BROADCAST.md** — all sessions directed to switch to Sonnet 4.6/Haiku 4.5 or tier aliases
+**Rule: when a session hits the plan limit, nothing changes.** Same model, same effort, same permission
+mode. Overflow bills to **usage credits** (the pay-as-you-go balance on the Claude subscription, formerly
+called "extra usage"). No downgrade to Sonnet/Haiku. The 2026-04-16 "switch to cheap tier" broadcast is
+retired.
 
-When credits refresh or increase: update `BROADCAST.md` with "all clear" message and fan out.
+### One-time setup (ZP, local machine)
+
+1. Turn on usage credits: claude.ai → **Settings → Usage → Usage credits → Enable**
+   (`https://claude.ai/settings/usage`, or type `/usage-credits` inside any Claude Code session).
+   Add a payment method, **Add funds** (prepaid), set a monthly spend limit. Billed at standard API rates,
+   separate from the subscription. Pro and Max users enable this themselves; Team/Enterprise admins do it
+   under Organization settings → Usage.
+2. Pin settings in `~/.claude/settings.json` (user scope, applies to hub + every spoke; `bypassPermissions`
+   is ignored in project-level files, so it has to live here):
+
+   ```json
+   {
+     "model": "<the model /model shows as your current default>",
+     "permissions": { "defaultMode": "bypassPermissions" },
+     "env": { "CLAUDE_CODE_EFFORT_LEVEL": "xhigh" },
+     "autoContinueAtUsageLimit": true
+   }
+   ```
+
+   `CLAUDE_CODE_EFFORT_LEVEL` outranks `--effort`, `/effort` and the `effortLevel` key, so it holds across
+   every model. Verify in a fresh session with `/status` (model, login method, setting sources).
+3. Keep `ANTHROPIC_API_KEY` **unset** in every shell that launches Claude Code. A set key silently moves the
+   session to Console (API) billing, with no automatic fallback back to the subscription. Check `/status`.
+
+### What happens at the limit
+
+- Claude Code blocks at the session (5-hour) or weekly limit, shows the reset time, and by default
+  **auto-continues** when the window resets.
+- With usage credits funded, the limit screen offers `/usage-credits to continue now`; Claude Code picks the
+  credits up and continues on the same model. Fable is the one exception: it asks for consent before billing
+  credits, so answer the prompt.
+- Family limits (Opus-only, Sonnet-only, Max's weekly Fable limit) are separate from the shared session
+  and weekly limits.
+
+### Where to check
+
+| Command | Shows |
+|---------|-------|
+| `/usage` | session + weekly bars, plan breakdown, usage-credits spend vs monthly limit |
+| `/status` | model, account, login method, setting sources |
+| `/rate-limit-options` | wait / add usage credits / upgrade |
+| `https://claude.ai/settings/usage` | credits on/off, balance, this month's spend, monthly limit |
+
+### Gotchas
+
+- Prompt-cache lifetime drops from 1 hour (subscription) to 5 minutes once a session is drawing on usage
+  credits. A big session resumed after a break re-reads more context. Keep spokes busy or restart them lean.
+- Cloud sessions (Claude Code on the web) always use subscription credentials, count toward the same plan
+  limits, and ignore `apiKeyHelper` / `ANTHROPIC_API_KEY`. Whether usage credits cover cloud sessions is not
+  stated in the docs as of 2026-10-16. Confirm on the first cloud limit hit and update this line.
+- Max's included monthly API credits cannot be used for usage credits or in Claude Code.
+- `-p` (print mode) and background sessions never auto-continue; they stop at the limit.
+
+### Rollout
+
+After setup, broadcast to every spoke so the old downgrade rule is dropped:
+
+```bash
+python3 fanout.py --raw --broadcast "all clear: plan limits roll to usage credits. Stay on default model + settings. Do not switch models. Ack switched=no."
+```
