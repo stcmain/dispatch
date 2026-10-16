@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chino Loc</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Chino Loc. Officially signed to Shift The Culture, 2026. Music, videos, shows, and the list.">
+<meta name="theme-color" content="#090609">
+<meta property="og:title" content="Chino Loc">
+<meta property="og:description" content="Officially signed to Shift The Culture. New era loading.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Anton&family=Archivo:wght@400;500;600&display=swap">
+<style>
+/* Layout: left-aligned editorial column over a full-bleed 3D hero; one accent (candy red), chrome + gold as material, everything else quiet. */
+:root{
+  color-scheme:dark;
+  --bg:#090609; --bg-2:#140b10; --fg:#f4ede6; --muted:#a89a93;
+  --accent:#e3243f; --gold:#e2b860; --line:rgba(244,237,230,.12);
+  --chrome:linear-gradient(180deg,#fff 0%,#c9ccd3 35%,#5d6068 50%,#e8eaef 52%,#8a8e96 100%);
+  --display:"Pirata One","UnifrakturMaguntia",Georgia,serif;
+  --head:"Anton","Impact","Arial Narrow Bold","Arial Narrow",sans-serif;
+  --body:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --gutter-l:max(16px,env(safe-area-inset-left,0px));
+  --gutter-r:max(16px,env(safe-area-inset-right,0px));
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--body);-webkit-font-smoothing:antialiased;min-width:0}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:var(--max);margin-inline:auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r);min-width:0}
+section{padding-block:clamp(56px,9vw,112px)}
+.skip{position:absolute;left:-999px;top:0;background:var(--gold);color:#120c05;padding:10px 14px;z-index:100;font-weight:600}
+.skip:focus{left:var(--gutter-l);top:calc(env(safe-area-inset-top,0px) + 8px)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* type */
+.eyebrow{font-family:var(--display);font-size:clamp(18px,2vw,22px);color:var(--gold);letter-spacing:.02em;line-height:1.2}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(28px,4vw,44px);max-width:760px}
+.sec-head h2{font-family:var(--head);font-size:clamp(42px,6.4vw,76px);line-height:.95;letter-spacing:.01em;text-transform:uppercase}
+.sec-head p{color:var(--muted);font-size:17px;max-width:60ch}
+.lede{font-size:clamp(18px,2vw,22px);line-height:1.45;max-width:62ch}
+.muted{color:var(--muted)}
+.small{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* buttons + pills */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 22px;border-radius:999px;font:600 15px/1 var(--body);text-decoration:none;border:1px solid transparent;cursor:pointer;color:var(--fg);background:transparent;transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#f0304b}
+.btn-ghost{border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--fg)}
+.btn[aria-disabled="true"]{cursor:default;opacity:.85}
+.btn[aria-disabled="true"]:hover{transform:none}
+.soon{display:inline-block;font:600 10px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(226,184,96,.45);border-radius:999px;padding:4px 7px;vertical-align:middle}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font:500 14px/1 var(--body);color:var(--fg);transition:border-color .15s}
+.pill:hover{border-color:var(--fg)}
+.pill[aria-disabled="true"]{color:var(--muted)}
+.pill[aria-disabled="true"]:hover{border-color:var(--line)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(9,6,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;position:relative}
+.brand{font-family:var(--display);font-size:28px;line-height:1;text-decoration:none;color:var(--fg)}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none;margin:0;padding:0}
+.nav-links a:not(.btn){color:var(--muted);text-decoration:none;font:500 13px/1 var(--body);letter-spacing:.1em;text-transform:uppercase}
+.nav-links a:not(.btn):hover{color:var(--fg)}
+.nav-links .btn{padding:10px 18px;font-size:13px}
+.menu-btn{display:none;align-items:center;gap:8px;background:none;border:1px solid var(--line);border-radius:999px;color:var(--fg);padding:9px 14px;font:600 13px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+@media (max-width:780px){
+  .nav-links{display:none}
+  .nav.open .nav-links{display:flex;flex-direction:column;align-items:flex-start;position:absolute;left:0;right:0;top:100%;background:var(--bg-2);padding:18px var(--gutter-r) 24px var(--gutter-l);gap:18px;border-bottom:1px solid var(--line)}
+  .menu-btn{display:inline-flex}
+}
+
+/* hero */
+.hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;overflow:hidden;background:radial-gradient(ellipse at 68% 38%,#1f1017 0%,var(--bg) 62%);padding-block:0}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,6,9,0) 42%,rgba(9,6,9,.88) 100%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;width:100%;padding-block:72px 64px}
+.hero h1{font-family:var(--head);font-size:clamp(78px,17vw,210px);line-height:.88;letter-spacing:.01em;background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;margin-top:10px;filter:drop-shadow(0 6px 24px rgba(0,0,0,.55))}
+.hero .sub{font-size:clamp(18px,2.2vw,24px);color:var(--muted);max-width:34ch;margin:18px 0 28px;line-height:1.35}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+
+/* marquee */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding-block:14px;background:var(--bg-2)}
+.track{display:flex;width:max-content;animation:marquee 30s linear infinite}
+.track>div{display:flex;flex-shrink:0}
+.track span{font-family:var(--head);font-size:clamp(20px,2.4vw,28px);letter-spacing:.08em;white-space:nowrap;padding-right:.9em;text-transform:uppercase}
+.track b{color:var(--accent);font-weight:400}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* deal */
+.deal .grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.coin-wrap{position:relative;aspect-ratio:1;max-width:100%;width:100%}
+.coin-wrap canvas{width:100%;height:100%;display:block}
+.coin-fallback{position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f6e3a6,#e2b860 45%,#8a6420 100%);display:none;align-items:center;justify-content:center;font-family:var(--head);font-size:clamp(48px,8vw,96px);color:#3a2a0a}
+.coin-wrap.no3d .coin-fallback{display:flex}
+.deal h2{font-family:var(--head);font-size:clamp(40px,5.6vw,68px);line-height:.95;text-transform:uppercase}
+.deal h2 em{font-style:normal;color:var(--accent)}
+.deal .copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.ticks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ticks li{display:flex;gap:14px;align-items:baseline;font-size:17px}
+.ticks li::before{content:"";width:10px;height:10px;background:var(--gold);flex:none;transform:translateY(-1px) rotate(45deg)}
+@media (max-width:880px){.deal .grid{grid-template-columns:1fr}.coin-wrap{max-width:320px}}
+
+/* music */
+.spotlight{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:center;padding:clamp(16px,2.4vw,28px);border:1px solid var(--line);background:var(--bg-2)}
+.spotlight img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+.spotlight .info{display:flex;flex-direction:column;gap:14px;min-width:0}
+.spotlight h3{font-family:var(--head);font-size:clamp(34px,4.6vw,56px);line-height:.95;text-transform:uppercase}
+.platforms{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:40px}
+.card{position:relative;border:1px solid var(--line);background:var(--bg-2);transform-style:preserve-3d;will-change:transform;text-decoration:none;color:inherit;display:block;min-width:0}
+.card img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+.card.video img{aspect-ratio:16/9}
+.glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 46%);opacity:0;transition:opacity .2s}
+.card:hover .glare{opacity:1}
+.card .meta{padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px}
+.card .meta strong{font:600 16px/1.3 var(--body)}
+.card .meta span{font-size:13px;color:var(--muted)}
+.card .soon{position:absolute;top:12px;right:12px;background:rgba(9,6,9,.7)}
+.play{position:absolute;left:50%;top:50%;width:64px;height:64px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(9,6,9,.65);border:1px solid rgba(244,237,230,.35);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.play::after{content:"";border-style:solid;border-width:11px 0 11px 19px;border-color:transparent transparent transparent var(--fg);margin-left:4px}
+.card.video .play{top:calc((100% - 72px)/2)}
+.note{margin-top:22px;color:var(--muted);font-size:14px}
+@media (max-width:880px){.catalog{grid-template-columns:1fr}.spotlight{grid-template-columns:1fr}}
+@media (min-width:881px) and (max-width:1024px){.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* shows */
+.table-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:520px}
+th,td{text-align:left;padding:16px 18px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td a{color:var(--gold)}
+.book{margin-top:28px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.reveal-box{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:14px 16px;border:1px solid var(--line);background:var(--bg-2);max-width:100%;min-width:0}
+.reveal-box code{font:500 16px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg);user-select:all;-webkit-user-select:all;word-break:break-all}
+.reveal-box .status{font-size:13px;color:var(--gold);min-width:0}
+
+/* story */
+.story .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start}
+.story blockquote{margin:0;font-family:var(--display);font-size:clamp(32px,4.4vw,54px);line-height:1.08;color:var(--fg)}
+.story .copy{display:flex;flex-direction:column;gap:20px;min-width:0}
+@media (max-width:880px){.story .grid{grid-template-columns:1fr}}
+
+/* join */
+.join{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.join form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:12px;align-items:end;max-width:760px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field input{width:100%;min-width:0;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:999px;color:var(--fg);font:400 16px/1.2 var(--body)}
+.field input:focus{border-color:var(--gold);outline:none}
+.form-msg{margin-top:16px;font-size:15px;min-height:1.4em}
+.form-msg.ok{color:var(--gold)}
+.form-msg.err{color:var(--accent)}
+.form-msg a{color:var(--gold)}
+@media (max-width:720px){.join form{grid-template-columns:1fr}}
+
+/* footer */
+footer{padding-block:40px 48px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px}
+.socials{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+footer .brand{font-size:32px}
+footer p{color:var(--muted);font-size:14px}
+footer p a{color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .track{animation:none}
+  .btn,.pill{transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#music">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Chino Loc</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#music">Music</a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#shows">Shows</a></li>
+      <li><a href="#story">Story</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="btn btn-primary" href="#music">Listen</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <p class="eyebrow">Shift The Culture presents</p>
+      <h1>Chino Loc</h1>
+      <p class="sub">Officially signed. New era loading.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" id="listenNow" href="#music">Listen now</a>
+        <a class="btn btn-ghost" href="#contact">Join the list</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span></div>
+      <div><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span><span>Chino Loc <b>•</b></span><span>Shift The Culture <b>•</b></span><span>Official Roster 2026 <b>•</b></span></div>
+    </div>
+  </div>
+
+  <section class="deal" id="deal">
+    <div class="wrap grid">
+      <div class="coin-wrap" id="coinWrap">
+        <canvas id="coinCanvas" aria-hidden="true"></canvas>
+        <div class="coin-fallback" aria-hidden="true">STC</div>
+      </div>
+      <div class="copy" data-reveal>
+        <p class="eyebrow">The deal</p>
+        <h2>Chino Loc <em>×</em> Shift The Culture.<br>Officially signed, 2026.</h2>
+        <p class="lede">Records, visuals, rollout and a platform of his own. One team behind every drop, from the studio to the stage, so the music travels further than the feed.</p>
+        <ul class="ticks">
+          <li>Debut single under Shift The Culture</li>
+          <li>Visuals for every record</li>
+          <li>Live dates, announced here first</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="music">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">Music</p>
+        <h2>Latest</h2>
+      </div>
+      <div class="spotlight" id="spotlight" data-reveal></div>
+      <div class="platforms" id="platforms" data-reveal></div>
+      <div class="catalog" id="catalog"></div>
+      <p class="note">Catalog populates as drops land.</p>
+    </div>
+  </section>
+
+  <section id="videos">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">Videos</p>
+        <h2>Watch</h2>
+      </div>
+      <div class="catalog" id="videoGrid" style="margin-top:0"></div>
+    </div>
+  </section>
+
+  <section id="shows">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">Shows</p>
+        <h2>Live</h2>
+        <p>Dates land here first. Promoters and venues can request a date below.</p>
+      </div>
+      <div class="table-wrap" data-reveal>
+        <table>
+          <thead><tr><th scope="col">Date</th><th scope="col">City</th><th scope="col">Venue</th><th scope="col"><span class="small">Tickets</span></th></tr></thead>
+          <tbody>
+            <tr><td>TBA</td><td>Your city</td><td>—</td><td><a href="#bookBtn">Request a date</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="book">
+        <button class="btn btn-primary" id="bookBtn" type="button" aria-expanded="false" aria-controls="bookReveal">Book Chino Loc</button>
+        <div class="reveal-box" id="bookReveal" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="wrap grid">
+      <div data-reveal>
+        <p class="eyebrow" id="storyEyebrow">Story</p>
+        <blockquote>A new name on the Shift The Culture roster.</blockquote>
+      </div>
+      <div class="copy" data-reveal>
+        <p class="lede">Chino Loc arrives with a sound of his own and a team built to take it everywhere. The first chapter starts with the debut single and the visuals behind it. Everything after that lands here.</p>
+        <div>
+          <button class="btn btn-ghost" id="pressBtn" type="button" aria-expanded="false" aria-controls="pressReveal">Request press kit</button>
+        </div>
+        <div class="reveal-box" id="pressReveal" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join" id="contact">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">Join the list</p>
+        <h2>First to know</h2>
+        <p>Drops, dates and the things that never make the feed. Email and your city, nothing else.</p>
+      </div>
+      <form id="joinForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Where you at">
+        </div>
+        <button class="btn btn-primary" id="joinBtn" type="submit">Join</button>
+      </form>
+      <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top">Chino Loc</a>
+    <ul class="socials" id="socials"></ul>
+    <p id="copyright"></p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ============================================================
+   CONFIG — the only place to edit before go-live.
+   "#" = placeholder, rendered with a "soon" pill.
+   Values marked VERIFIED were read off public pages 2026-10-15
+   (Spotify artist page, Instagram, his own bio link) and still
+   need the owner's eyeball before the site goes live.
+   ============================================================ */
+const CONFIG = {
+  artist: "Chino Loc",
+  label: "Shift The Culture",
+  labelUrl: "https://shifttheculture.media",
+  year: 2026,
+  city: "Austin, Texas",                                 // VERIFIED (IG bio)
+  bookingEmail: "info@shifttheculture.media",            // DEFAULT, confirm before go-live
+  signupEndpoint: "",                                    // Formspree / Mailchimp / Beehiiv POST URL. Empty = fallback message, never a fake success.
+  listen: "https://open.spotify.com/artist/4wb1ZG1R1tXxqYQsXLoVui", // hero "Listen now". "" = scroll to Music.
+  platforms: [
+    { name: "Spotify",     url: "https://open.spotify.com/artist/4wb1ZG1R1tXxqYQsXLoVui" }, // VERIFIED
+    { name: "Apple Music", url: "#" },
+    { name: "YouTube",     url: "#" },
+    { name: "SoundCloud",  url: "#" },
+    { name: "Audiomack",   url: "#" }
+  ],
+  socials: [
+    { name: "Instagram", url: "https://www.instagram.com/chino_loc2460/" }, // VERIFIED (owner-supplied)
+    { name: "TikTok",    url: "#" },
+    { name: "X",         url: "#" },
+    { name: "YouTube",   url: "#" }
+  ],
+  latest: {
+    title: "Title TBA",
+    note: "Debut single under Shift The Culture",
+    year: "2026",
+    presave: "#",                                        // pre-save link
+    seed: 7
+  },
+  catalog: [                                             // VERIFIED: Pak Pak releases featuring Chino Loc (Spotify album pages)
+    { title: "Got Me A Knot",     credit: "Pak Pak × Chino Loc × Breadwinna Bull", year: "2025", url: "https://open.spotify.com/album/6pN1UG8qyKsRyDMTLf2Fj3", seed: 3 },
+    { title: "Left Alone",        credit: "Pak Pak × Chino Loc",                   year: "2025", url: "https://open.spotify.com/album/6pabOzFwae0rUzHhabePya", seed: 5 },
+    { title: "Too Greasy (Remix)",credit: "Pak Pak × Chino Loc & more",            year: "2024", url: "https://open.spotify.com/album/1MRQMiMOJR47uUBgxYZ6SN", seed: 9 }
+  ],
+  videos: [
+    { title: "84s Pokin Out (ft. E.S.G)", note: "Official video", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", seed: 11 }, // VERIFIED (his bio link)
+    { title: "Video 02 · Title TBA",      note: "Coming soon",    url: "#", seed: 13 },
+    { title: "Video 03 · Title TBA",      note: "Coming soon",    url: "#", seed: 17 }
+  ]
+};
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const isPlaceholder = u => !u || u === "#";
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = matchMedia("(pointer: fine)").matches;
+const has3D = typeof THREE !== "undefined";
+const hasGsap = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+
+function linkAttrs(url) {
+  return isPlaceholder(url)
+    ? 'href="#" aria-disabled="true" data-soon'
+    : `href="${esc(url)}" target="_blank" rel="noopener"`;
+}
+function soonPill(url) { return isPlaceholder(url) ? '<span class="soon">soon</span>' : ""; }
+
+/* Generated artwork: dark gradient from seed, diagonal chrome stripe, big low-opacity CL, small label. */
+function artwork(seed, label, w, h) {
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const x = c.getContext("2d");
+  const hue = (seed * 47) % 360;
+  const g = x.createLinearGradient(0, 0, w, h);
+  g.addColorStop(0, `hsl(${hue} 32% 8%)`); g.addColorStop(1, `hsl(${(hue + 36) % 360} 40% 15%)`);
+  x.fillStyle = g; x.fillRect(0, 0, w, h);
+  x.save(); x.translate(w / 2, h / 2); x.rotate(-Math.PI / 5);
+  const sh = h * 0.085;
+  const s = x.createLinearGradient(0, -sh, 0, sh);
+  s.addColorStop(0, "#ffffff"); s.addColorStop(.35, "#c9ccd3"); s.addColorStop(.5, "#5d6068"); s.addColorStop(.52, "#e8eaef"); s.addColorStop(1, "#8a8e96");
+  x.fillStyle = s; x.fillRect(-w * 1.2, -sh, w * 2.4, sh * 2); x.restore();
+  x.fillStyle = "rgba(244,237,230,.085)";
+  x.font = `${Math.round(h * 0.92)}px "Pirata One", Georgia, serif`;
+  x.textAlign = "center"; x.textBaseline = "middle";
+  x.fillText("CL", w / 2, h * 0.56);
+  x.fillStyle = "#e2b860";
+  x.font = `600 ${Math.max(14, Math.round(h * 0.042))}px Archivo, sans-serif`;
+  x.textAlign = "left"; x.textBaseline = "alphabetic";
+  x.fillText(String(label).toUpperCase(), w * 0.06, h * 0.92);
+  return c.toDataURL("image/jpeg", 0.84);
+}
+function paintArtwork() {
+  document.querySelectorAll("img[data-seed]").forEach(img => {
+    const w = +img.dataset.w || 600, h = +img.dataset.h || 600;
+    img.src = artwork(+img.dataset.seed, img.dataset.label || "", w, h);
+  });
+}
+
+/* ---------- render CONFIG ---------- */
+function render() {
+  const L = CONFIG.latest;
+  $("#spotlight").innerHTML = `
+    <img data-seed="${L.seed}" data-label="${esc(L.title)}" data-w="600" data-h="600" width="600" height="600" alt="Cover art placeholder for ${esc(L.title)}">
+    <div class="info">
+      <p class="small">${esc(L.note)} · ${esc(L.year)}</p>
+      <h3>${esc(L.title)}</h3>
+      <p class="muted">Pre-save it and it lands in your library the second it drops.</p>
+      <div class="ctas"><a class="btn btn-primary" ${linkAttrs(L.presave)}>Pre-save ${soonPill(L.presave)}</a></div>
+    </div>`;
+
+  $("#platforms").innerHTML = CONFIG.platforms.map(p =>
+    `<a class="pill" ${linkAttrs(p.url)}>${esc(p.name)} ${soonPill(p.url)}</a>`).join("");
+
+  $("#catalog").innerHTML = CONFIG.catalog.map(r => `
+    <a class="card tilt" ${linkAttrs(r.url)}>
+      <img data-seed="${r.seed}" data-label="${esc(r.title)}" data-w="600" data-h="600" width="600" height="600" alt="Cover art placeholder for ${esc(r.title)}">
+      <div class="glare"></div>
+      ${soonPill(r.url)}
+      <div class="meta"><strong>${esc(r.title)}</strong><span>${esc(r.credit)} · ${esc(r.year)}</span></div>
+    </a>`).join("");
+
+  $("#videoGrid").innerHTML = CONFIG.videos.map(v => `
+    <a class="card tilt video" ${linkAttrs(v.url)}>
+      <img data-seed="${v.seed}" data-label="${esc(v.title)}" data-w="640" data-h="360" width="640" height="360" alt="Thumbnail placeholder for ${esc(v.title)}">
+      <div class="glare"></div>
+      <div class="play" aria-hidden="true"></div>
+      ${soonPill(v.url)}
+      <div class="meta"><strong>${esc(v.title)}</strong><span>${esc(v.note || "")}</span></div>
+    </a>`).join("");
+
+  $("#socials").innerHTML = CONFIG.socials.map(s =>
+    `<li><a class="pill" ${linkAttrs(s.url)}>${esc(s.name)} ${soonPill(s.url)}</a></li>`).join("");
+
+  $("#copyright").innerHTML = `© ${CONFIG.year} ${esc(CONFIG.artist)}. A <a href="${esc(CONFIG.labelUrl)}" target="_blank" rel="noopener">${esc(CONFIG.label)}</a> artist.`;
+  if (CONFIG.city) $("#storyEyebrow").textContent = CONFIG.city;
+  if (!isPlaceholder(CONFIG.listen)) { const a = $("#listenNow"); a.href = CONFIG.listen; a.target = "_blank"; a.rel = "noopener"; }
+
+  document.addEventListener("click", e => {
+    const a = e.target.closest("[data-soon]");
+    if (a) e.preventDefault();
+  });
+  paintArtwork();
+}
+
+/* ---------- nav ---------- */
+(function nav() {
+  const nav = $("#nav"), btn = $("#menuBtn");
+  btn.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+    btn.textContent = open ? "Close" : "Menu";
+  });
+  $("#navLinks").addEventListener("click", e => {
+    if (e.target.closest("a")) { nav.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.textContent = "Menu"; }
+  });
+})();
+
+/* ---------- email reveal + copy (booking / press) ---------- */
+function wireReveal(btnId, boxId, label) {
+  const btn = $("#" + btnId), box = $("#" + boxId);
+  btn.addEventListener("click", () => {
+    const open = box.hidden;
+    if (open && !box.dataset.ready) {
+      box.innerHTML = `<span class="small">${esc(label)}</span><code>${esc(CONFIG.bookingEmail)}</code><button class="btn btn-ghost" type="button">Copy</button><span class="status" role="status"></span>`;
+      const copy = $("button", box), status = $(".status", box), code = $("code", box);
+      copy.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(CONFIG.bookingEmail); status.textContent = "Copied"; }
+        catch (_) {
+          const r = document.createRange(); r.selectNodeContents(code);
+          const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+          status.textContent = "Selected. Press copy on your keyboard.";
+        }
+        setTimeout(() => { status.textContent = ""; }, 2400);
+      });
+      box.dataset.ready = "1";
+    }
+    box.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  });
+}
+wireReveal("bookBtn", "bookReveal", "Booking & press");
+wireReveal("pressBtn", "pressReveal", "Press kit requests");
+
+/* ---------- join the list ---------- */
+(function join() {
+  const form = $("#joinForm"), msg = $("#formMsg"), btn = $("#joinBtn");
+  const ig = (CONFIG.socials.find(s => s.name === "Instagram") || {}).url;
+  const say = (html, cls) => { msg.className = "form-msg " + (cls || ""); msg.innerHTML = html; };
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = form.email.value.trim(), city = form.city.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say("Enter a valid email address.", "err"); form.email.focus(); return; }
+    if (!CONFIG.signupEndpoint) {
+      say(`List opens with the first drop. ${isPlaceholder(ig) ? "Follow on Instagram" : `<a href="${esc(ig)}" target="_blank" rel="noopener">Follow on Instagram</a>`} so you don't miss it.`);
+      return;
+    }
+    btn.disabled = true; say("Adding you…");
+    try {
+      const r = await fetch(CONFIG.signupEndpoint, {
+        method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ email, city, source: "chinoloc-site" })
+      });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      say("You're on the list.", "ok"); form.reset();
+    } catch (err) {
+      say("That didn't go through. Try again in a minute.", "err");
+    } finally { btn.disabled = false; }
+  });
+})();
+
+/* ---------- tilt cards (desktop pointer only) ---------- */
+function wireTilt() {
+  if (!finePointer || reduced) return;
+  document.querySelectorAll(".tilt").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      if (e.pointerType === "touch") return;
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      const ry = (px - .5) * 20, rx = (.5 - py) * 20;
+      card.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      card.style.setProperty("--gx", (px * 100).toFixed(1) + "%");
+      card.style.setProperty("--gy", (py * 100).toFixed(1) + "%");
+    });
+    card.addEventListener("pointerleave", () => { card.style.transform = ""; });
+  });
+}
+
+/* ---------- reveals (transform only; content is visible at rest) ---------- */
+function wireReveals() {
+  if (!hasGsap || reduced) return;
+  document.querySelectorAll("[data-reveal]").forEach(el => {
+    gsap.from(el, { y: 24, duration: .8, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%", once: true } });
+  });
+}
+
+/* ============================================================
+   3D — Three.js r128, MeshMatcapMaterial (no lights)
+   ============================================================ */
+function matcap(kind) {
+  const S = 256, c = document.createElement("canvas"); c.width = c.height = S;
+  const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, 0, S);
+  if (kind === "chrome") {
+    g.addColorStop(0, "#ffffff"); g.addColorStop(.35, "#c9ccd3"); g.addColorStop(.5, "#5d6068");
+    g.addColorStop(.52, "#e8eaef"); g.addColorStop(.78, "#8a8e96"); g.addColorStop(1, "#23252a");
+  } else {
+    g.addColorStop(0, "#fff7dc"); g.addColorStop(.35, "#e9c46a"); g.addColorStop(.5, "#6a4710");
+    g.addColorStop(.52, "#f3d98a"); g.addColorStop(.8, "#b8862e"); g.addColorStop(1, "#2b1c05");
+  }
+  x.fillStyle = g; x.fillRect(0, 0, S, S);
+  const spec = x.createRadialGradient(S * .32, S * .28, 0, S * .32, S * .28, S * .34);
+  spec.addColorStop(0, "rgba(255,255,255,.95)"); spec.addColorStop(1, "rgba(255,255,255,0)");
+  x.fillStyle = spec; x.fillRect(0, 0, S, S);
+  const rim = x.createRadialGradient(S / 2, S / 2, S * .36, S / 2, S / 2, S * .5);
+  rim.addColorStop(0, "rgba(0,0,0,0)"); rim.addColorStop(1, "rgba(0,0,0,.85)");
+  x.fillStyle = rim; x.fillRect(0, 0, S, S);
+  const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+}
+function makeRenderer(canvas) {
+  const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  r.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  r.outputEncoding = THREE.sRGBEncoding;
+  r.setClearColor(0x000000, 0);
+  return r;
+}
+function canvasTex(c) { const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t; }
+/* a two-faced coin: cylinder for the rim, two discs carrying the face texture (standard UVs, never mirrored) */
+function coin(radius, h, sideMat, faceTex) {
+  const g = new THREE.Group();
+  const cyl = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, h, 64), sideMat);
+  cyl.rotation.x = Math.PI / 2;
+  g.add(cyl);
+  const faceMat = new THREE.MeshMatcapMaterial({ matcap: sideMat.matcap, map: faceTex });
+  const disc = new THREE.CircleGeometry(radius * .995, 64);
+  const front = new THREE.Mesh(disc, faceMat); front.position.z = h / 2 + .002;
+  const back = new THREE.Mesh(disc, faceMat); back.position.z = -h / 2 - .002; back.rotation.y = Math.PI;
+  g.add(front, back);
+  return g;
+}
+function flakeSprite() {
+  const c = document.createElement("canvas"); c.width = c.height = 32;
+  const x = c.getContext("2d");
+  const g = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+  g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(.4, "rgba(255,240,200,.8)"); g.addColorStop(1, "rgba(255,240,200,0)");
+  x.fillStyle = g; x.fillRect(0, 0, 32, 32);
+  return new THREE.CanvasTexture(c);
+}
+function flakes(count) {
+  const pos = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    pos[i * 3] = (Math.random() - .5) * 34; pos[i * 3 + 1] = (Math.random() - .5) * 22; pos[i * 3 + 2] = (Math.random() - .5) * 16;
+  }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({ color: 0xe2b860, size: .09, map: flakeSprite(), transparent: true, opacity: .75, blending: THREE.AdditiveBlending, depthWrite: false, alphaTest: .02 });
+  return new THREE.Points(geo, mat);
+}
+/* pendant face: gold ground, ring, "CL" in Pirata One */
+function pendantFace() {
+  const S = 512, c = document.createElement("canvas"); c.width = c.height = S;
+  const x = c.getContext("2d"), cx = S / 2;
+  const base = x.createRadialGradient(cx * .8, cx * .75, S * .05, cx, cx, S * .5);
+  base.addColorStop(0, "#f7e6b0"); base.addColorStop(.6, "#e2b860"); base.addColorStop(1, "#9c7326");
+  x.fillStyle = base; x.fillRect(0, 0, S, S);
+  x.strokeStyle = "rgba(58,42,10,.6)"; x.lineWidth = 8; x.beginPath(); x.arc(cx, cx, S * .44, 0, Math.PI * 2); x.stroke();
+  x.fillStyle = "#3a2a0a"; x.textAlign = "center"; x.textBaseline = "middle";
+  x.font = `${S * .56}px "Pirata One", Georgia, serif`;
+  x.fillText("CL", cx, cx + S * .02);
+  return c;
+}
+/* STC coin face: gold ground, concentric rings, rim text per character, STC + 2026 */
+function stcFace() {
+  const S = 1024, c = document.createElement("canvas"); c.width = c.height = S;
+  const x = c.getContext("2d"), cx = S / 2;
+  const base = x.createRadialGradient(cx * .8, cx * .75, S * .05, cx, cx, S * .5);
+  base.addColorStop(0, "#f7e6b0"); base.addColorStop(.6, "#e2b860"); base.addColorStop(1, "#a07628");
+  x.fillStyle = base; x.fillRect(0, 0, S, S);
+  x.strokeStyle = "rgba(58,42,10,.6)";
+  [[.47, 8], [.44, 3], [.33, 6], [.305, 2]].forEach(([r, w]) => { x.lineWidth = w; x.beginPath(); x.arc(cx, cx, S * r, 0, Math.PI * 2); x.stroke(); });
+  x.fillStyle = "#3a2a0a"; x.textAlign = "center"; x.textBaseline = "middle";
+  const text = "SHIFT THE CULTURE ★ OFFICIAL ROSTER ★ ";
+  x.font = `600 ${S * .05}px Archivo, sans-serif`;
+  const R = S * .385, n = text.length;
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + i * (Math.PI * 2 / n);
+    x.save(); x.translate(cx + Math.cos(a) * R, cx + Math.sin(a) * R); x.rotate(a + Math.PI / 2); x.fillText(text[i], 0, 0); x.restore();
+  }
+  x.font = `${S * .3}px Anton, Impact, sans-serif`;
+  x.fillText("STC", cx, cx - S * .03);
+  x.font = `600 ${S * .062}px Archivo, sans-serif`;
+  x.fillText("2 0 2 6", cx, cx + S * .17);
+  return c;
+}
+
+/* ---------- hero: chrome chain, CL pendant, gold flakes ---------- */
+function heroScene() {
+  const canvas = $("#heroCanvas"), hero = $("#hero");
+  if (!has3D) return;
+  let renderer;
+  try { renderer = makeRenderer(canvas); } catch (_) { return; }
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x090609, .045);
+  const camera = new THREE.PerspectiveCamera(40, 1, .1, 100);
+  camera.position.z = 15;
+
+  const chrome = new THREE.MeshMatcapMaterial({ matcap: matcap("chrome") });
+  const gold = new THREE.MeshMatcapMaterial({ matcap: matcap("gold") });
+
+  /* stadium path, long axis along local Y so the link runs along the ring */
+  const L = 1.1, R = .42, h = L / 2, pts = [];
+  const add = (px, py) => pts.push(new THREE.Vector3(px, py, 0));
+  for (let i = 0; i < 8; i++) add(R, -h + L * i / 8);
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI; add(Math.cos(a) * R, h + Math.sin(a) * R); }
+  for (let i = 0; i < 8; i++) add(-R, h - L * i / 8);
+  for (let i = 0; i < 12; i++) { const a = Math.PI + i / 12 * Math.PI; add(Math.cos(a) * R, -h + Math.sin(a) * R); }
+  const curve = new THREE.CatmullRomCurve3(pts, true, "centripetal");
+  const linkGeo = new THREE.TubeGeometry(curve, 96, .13, 20, true);
+
+  const group = new THREE.Group();
+  const necklace = new THREE.Group();
+  const N = 30, pitch = 1.05, Rc = N * pitch / (2 * Math.PI);
+  for (let i = 0; i < N; i++) {
+    const pivot = new THREE.Group(); pivot.rotation.z = i / N * Math.PI * 2;
+    const link = new THREE.Mesh(linkGeo, chrome); link.position.x = Rc; link.rotation.y = i * Math.PI / 2;
+    pivot.add(link); necklace.add(pivot);
+  }
+  group.add(necklace);
+
+  const bail = new THREE.Mesh(new THREE.TorusGeometry(.38, .11, 16, 40), gold);
+  bail.position.set(0, -Rc - .3, 0);
+  group.add(bail);
+  const faceCanvas = pendantFace();
+  const faceTex = canvasTex(faceCanvas);
+  const pendant = coin(1.3, .18, gold, faceTex);
+  pendant.position.set(0, -Rc - 1.95, 0);
+  group.add(pendant);
+  scene.add(group);
+
+  const mobile = innerWidth < 760;
+  const dust = flakes(mobile ? 600 : 1500);
+  scene.add(dust);
+
+  const state = { rz: 0, cz: 15, px: 0, py: 0, tx: 0, ty: 0 };
+  function layout() {
+    const w = hero.clientWidth, hgt = hero.clientHeight;
+    renderer.setSize(w, hgt, false);
+    camera.aspect = w / hgt; camera.updateProjectionMatrix();
+    const wide = w > 900;
+    group.position.set(wide ? 2.5 : 0, wide ? 1.25 : 1.5, 0);
+    const s = wide ? .72 : (w < 560 ? .56 : .64);
+    group.scale.setScalar(s);
+  }
+  layout();
+
+  if (hasGsap && !reduced) {
+    gsap.to(state, { rz: Math.PI / 2, cz: 21, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
+  }
+  if (finePointer && !reduced) {
+    addEventListener("pointermove", e => { state.tx = (e.clientX / innerWidth - .5) * 2; state.ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+  }
+
+  let t0 = performance.now();
+  function update(now) {
+    const t = (now - t0) / 1000;
+    state.px += (state.tx - state.px) * .04; state.py += (state.ty - state.py) * .04;
+    group.rotation.y = Math.sin(t * .22) * .42 + state.px * .28;
+    group.rotation.x = Math.sin(t * .17) * .12 + state.py * .18;
+    group.rotation.z = state.rz;
+    pendant.rotation.y = t * .5;
+    dust.rotation.y = t * .02; dust.position.y = Math.sin(t * .2) * .4;
+    camera.position.z = state.cz;
+  }
+  function draw() { renderer.render(scene, camera); }
+
+  let running = false, visible = true;
+  function frame(now) { if (!running) return; update(now); draw(); requestAnimationFrame(frame); }
+  function start() { if (running || reduced) return; running = true; requestAnimationFrame(frame); }
+  function stop() { running = false; }
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; (visible && !document.hidden) ? start() : stop(); }).observe(hero);
+  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : (visible && start()); });
+  addEventListener("resize", () => { layout(); if (reduced) draw(); });
+
+  update(performance.now()); draw();
+  document.fonts.ready.then(() => {
+    const c2 = pendantFace(); faceCanvas.getContext("2d").drawImage(c2, 0, 0); faceTex.needsUpdate = true;
+    if (reduced) draw();
+  });
+}
+
+/* ---------- the deal: spinning STC coin ---------- */
+function coinScene() {
+  const wrap = $("#coinWrap"), canvas = $("#coinCanvas");
+  if (!has3D) { wrap.classList.add("no3d"); return; }
+  let renderer;
+  try { renderer = makeRenderer(canvas); } catch (_) { wrap.classList.add("no3d"); return; }
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, .1, 50);
+  camera.position.z = 6.2;
+  const gold = new THREE.MeshMatcapMaterial({ matcap: matcap("gold") });
+  const faceCanvas = stcFace();
+  const faceTex = canvasTex(faceCanvas);
+  const c = coin(1.3, .18, gold, faceTex);
+  const spin = new THREE.Group(); spin.add(c); scene.add(spin);
+  scene.add(flakes(140));
+
+  function layout() {
+    const s = wrap.clientWidth || 320;
+    renderer.setSize(s, s, false); camera.aspect = 1; camera.updateProjectionMatrix();
+  }
+  layout();
+
+  let speed = .6, target = .6, angle = 0, last = performance.now();
+  wrap.addEventListener("pointerenter", () => { target = 2.4; });
+  wrap.addEventListener("pointerleave", () => { target = .6; });
+
+  function draw() { renderer.render(scene, camera); }
+  function update(now) {
+    const dt = Math.min((now - last) / 1000, .05); last = now;
+    speed += (target - speed) * .06;
+    angle += speed * dt;
+    spin.rotation.y = angle;
+    spin.rotation.x = Math.sin(now / 1000 * .9) * .16;
+  }
+  let running = false, visible = true;
+  function frame(now) { if (!running) return; update(now); draw(); requestAnimationFrame(frame); }
+  function start() { if (running || reduced) return; running = true; last = performance.now(); requestAnimationFrame(frame); }
+  function stop() { running = false; }
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; (visible && !document.hidden) ? start() : stop(); }).observe(wrap);
+  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : (visible && start()); });
+  addEventListener("resize", () => { layout(); if (reduced) draw(); });
+
+  spin.rotation.y = .5; spin.rotation.x = .12; draw();
+  document.fonts.ready.then(() => {
+    const c2 = stcFace(); faceCanvas.getContext("2d").drawImage(c2, 0, 0); faceTex.needsUpdate = true;
+    if (reduced) draw();
+  });
+}
+
+/* ---------- boot ---------- */
+render();
+wireTilt();
+wireReveals();
+heroScene();
+coinScene();
+Promise.all([
+  document.fonts.load('10px "Pirata One"'),
+  document.fonts.load('10px Anton'),
+  document.fonts.load('600 10px Archivo')
+]).then(paintArtwork, paintArtwork);
+</script>
+</body>
+</html>
