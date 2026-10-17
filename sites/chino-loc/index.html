@@ -10,6 +10,12 @@
 <meta property="og:title" content="Chino Loc">
 <meta property="og:description" content="Chino Loc × Shift The Culture. New era loading.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://stcmain.github.io/dispatch/chino-loc/">
+<meta property="og:image" content="https://stcmain.github.io/dispatch/chino-loc/art/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231c4fa8'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%237fc0ff' stroke-width='3'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='26' fill='%23e8f0ff'%3ECL%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Anton&family=Archivo:wght@400;500;600&display=swap">
@@ -446,10 +452,15 @@ const CONFIG = {
     { src: "art/stills/08.jpg", from: "Risk Taker",    pos: "50% 45%" },
     { src: "art/stills/09.jpg", from: "84s Pokin Out", pos: "50% 30%" }
   ],
-  videos: [
-    { title: "84s Pokin Out (ft. E.S.G)", note: "Official video", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", thumb: "art/yt-UlfKmnCxudk.jpg", seed: 11 }, // VERIFIED (his bio link)
-    { title: "Video 02 · Title TBA",      note: "Coming soon",    url: "#", seed: 13 },
-    { title: "Video 03 · Title TBA",      note: "Coming soon",    url: "#", seed: 17 }
+  videos: [                                              // VERIFIED: his public YouTube videos (newest first), thumbs cut from the videos, 2026-10-16
+    { title: "84s Pokin Out (ft. E.S.G)",     note: "Official video · 2025", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", thumb: "art/yt-UlfKmnCxudk.jpg" },
+    { title: "Juno",                          note: "Official video · 2024", url: "https://www.youtube.com/watch?v=_ducg3XB_BI", thumb: "art/yt-_ducg3XB_BI.jpg" },
+    { title: "Corinthians (with SOG D-Tane)", note: "Official video · 2023", url: "https://www.youtube.com/watch?v=DgaKK4ruFKY", thumb: "art/yt-DgaKK4ruFKY.jpg" },
+    { title: "Look Like Money",               note: "Freestyle · 2023",      url: "https://www.youtube.com/watch?v=O-OgmWp0MFk", thumb: "art/yt-O-OgmWp0MFk.jpg" },
+    { title: "Theives Freestyle",             note: "Freestyle · 2023",      url: "https://www.youtube.com/watch?v=u8t6MQGZaXY", thumb: "art/yt-u8t6MQGZaXY.jpg" },
+    { title: "Sell Out (with Chunk Norri$)",  note: "Official video · 2023", url: "https://www.youtube.com/watch?v=3cStX2JHbyw", thumb: "art/yt-3cStX2JHbyw.jpg" },
+    { title: "Risk Taker",                    note: "Official video · 2023", url: "https://www.youtube.com/watch?v=potDLzILXrc", thumb: "art/yt-potDLzILXrc.jpg" },
+    { title: "512 Freestyle",                 note: "Freestyle · 2023",      url: "https://www.youtube.com/watch?v=EksJu13LaZ4", thumb: "art/yt-EksJu13LaZ4.jpg" }
   ]
 };
 
@@ -538,9 +549,9 @@ function render() {
       <div class="meta"><strong>${esc(r.title)}</strong><span>${esc(r.credit)} · ${esc(r.year)}</span></div>
     </a>`).join("");
 
-  $("#videoGrid").innerHTML = CONFIG.videos.map(v => `
+  $("#videoGrid").innerHTML = CONFIG.videos.map((v, i) => `
     <a class="card tilt video" ${linkAttrs(v.url)}>
-      ${cover(v, 640, 360, "Thumbnail for")}
+      ${cover(v, 640, 360, "Thumbnail for").replace('loading="lazy"', i < 3 ? 'loading="eager"' : 'loading="lazy"')}
       <div class="glare"></div>
       <div class="play" aria-hidden="true"></div>
       ${soonPill(v.url)}
@@ -773,9 +784,10 @@ function photoTexture(src, done) {
     const g = x.createLinearGradient(0, 0, w, h); g.addColorStop(0, "#4f9cff"); g.addColorStop(1, "#1c4fa8");
     x.fillStyle = g; x.fillRect(0, 0, w, h);
     x.globalCompositeOperation = "destination-in";
-    const v = x.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .2, w / 2, h / 2, Math.max(w, h) * .62);
-    v.addColorStop(0, "rgba(0,0,0,1)"); v.addColorStop(1, "rgba(0,0,0,0)");
-    x.fillStyle = v; x.fillRect(0, 0, w, h);
+    x.save(); x.translate(w / 2, h / 2); x.scale(1, h / w);          // ellipse that touches the edge midpoints
+    const v = x.createRadialGradient(0, 0, w * .16, 0, 0, w * .5);
+    v.addColorStop(0, "rgba(0,0,0,1)"); v.addColorStop(.6, "rgba(0,0,0,.55)"); v.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = v; x.fillRect(-w / 2, -w / 2, w, w); x.restore();
     const tex = new THREE.CanvasTexture(c); tex.encoding = THREE.sRGBEncoding;
     done(tex, img.width / img.height);
   };
@@ -863,7 +875,7 @@ function heroScene() {
   const cardSpots = mobile ? [[-2.6, 5.4, -5], [3.4, -4.8, -6]] : [[-7.8, 3.6, -4], [9.8, -2.4, -3], [1.4, 6.4, -7]];
   const cardBodies = [];
   (CONFIG.stills || []).slice(0, cardSpots.length).forEach((st, i) => photoTexture(st.src, (tex, asp) => {
-    const m = photoPlane(tex, asp, mobile ? 3.4 : 4.4, .85);
+    const m = photoPlane(tex, asp, mobile ? 3.4 : 4.4, mobile ? .7 : .85);
     m.position.set(cardSpots[i][0], cardSpots[i][1], cardSpots[i][2]); m.rotation.set(0, i % 2 ? -.35 : .35, i % 2 ? .06 : -.06);
     cards.add(m); cardBodies.push({ m, y0: m.position.y, ph: i * 2.1 });
   }));
