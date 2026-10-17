@@ -526,7 +526,7 @@ function render() {
       <div class="meta"><strong>${esc(v.title)}</strong><span>${esc(v.note || "")}</span></div>
     </a>`).join("");
 
-  const still = (s, i) => `<figure class="still" style="--pos:${esc(s.pos || "50% 30%")}"><img src="${esc(s.src)}" width="1200" height="900" loading="${i < 3 ? "eager" : "lazy"}" decoding="async" alt="${esc(CONFIG.artist)}, still from ${esc(s.from)}"><figcaption>${esc(s.from)}</figcaption></figure>`;
+  const still = (s, i) => `<figure class="still" style="--pos:${esc(s.pos || "50% 30%")}"><img src="${esc(s.src)}" width="1200" height="900" loading="${i < 5 ? "eager" : "lazy"}" decoding="async" alt="${esc(CONFIG.artist)}, still from ${esc(s.from)}"><figcaption>${esc(s.from)}</figcaption></figure>`;
   $("#strip").innerHTML = CONFIG.stills.map(still).join("");
   $("#collage").innerHTML = CONFIG.stills.filter(s => s.story).slice(0, 2).map(still).join("");
   if (!CONFIG.stills.length) { $("#stills").hidden = true; $("#collage").hidden = true; }
