@@ -758,7 +758,35 @@ function stcFace() {
   return c;
 }
 
-/* ---------- hero: chrome chain, bead ring, halo chain, swinging CL pendant, two flake layers ---------- */
+/* stills as projections: grayscale → blue tint → soft vignette; additive so they float through the scene */
+function photoTexture(src, done) {
+  const img = new Image();
+  img.onload = () => {
+    const w = 512, h = Math.max(64, Math.round(w * img.height / img.width));
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d");
+    x.drawImage(img, 0, 0, w, h);
+    const d = x.getImageData(0, 0, w, h), q = d.data;
+    for (let i = 0; i < q.length; i += 4) { const l = Math.min(255, (.2126 * q[i] + .7152 * q[i + 1] + .0722 * q[i + 2]) * 1.35 + 10); q[i] = q[i + 1] = q[i + 2] = l; }
+    x.putImageData(d, 0, 0);
+    x.globalCompositeOperation = "color";
+    const g = x.createLinearGradient(0, 0, w, h); g.addColorStop(0, "#4f9cff"); g.addColorStop(1, "#1c4fa8");
+    x.fillStyle = g; x.fillRect(0, 0, w, h);
+    x.globalCompositeOperation = "destination-in";
+    const v = x.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .2, w / 2, h / 2, Math.max(w, h) * .62);
+    v.addColorStop(0, "rgba(0,0,0,1)"); v.addColorStop(1, "rgba(0,0,0,0)");
+    x.fillStyle = v; x.fillRect(0, 0, w, h);
+    const tex = new THREE.CanvasTexture(c); tex.encoding = THREE.sRGBEncoding;
+    done(tex, img.width / img.height);
+  };
+  img.src = src;
+}
+function photoPlane(tex, aspect, height, opacity) {
+  return new THREE.Mesh(new THREE.PlaneGeometry(aspect * height, height),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+}
+
+/* ---------- hero: chrome chain, bead ring, halo chain, swinging CL pendant, two flake layers, floating stills ---------- */
 function heroScene() {
   const canvas = $("#heroCanvas"), hero = $("#hero");
   if (!has3D) return;
@@ -830,6 +858,16 @@ function heroScene() {
   const far = flakes(mobile ? 340 : 900); far.material.size = .07; far.material.opacity = .5; far.position.z = -7;
   scene.add(near, far);
 
+  /* stills of the artist floating behind the chain; they rise as the page scrolls */
+  const cards = new THREE.Group(); scene.add(cards);
+  const cardSpots = mobile ? [[-2.6, 5.4, -5], [3.4, -4.8, -6]] : [[-7.8, 3.6, -4], [9.8, -2.4, -3], [1.4, 6.4, -7]];
+  const cardBodies = [];
+  (CONFIG.stills || []).slice(0, cardSpots.length).forEach((st, i) => photoTexture(st.src, (tex, asp) => {
+    const m = photoPlane(tex, asp, mobile ? 3.4 : 4.4, .85);
+    m.position.set(cardSpots[i][0], cardSpots[i][1], cardSpots[i][2]); m.rotation.set(0, i % 2 ? -.35 : .35, i % 2 ? .06 : -.06);
+    cards.add(m); cardBodies.push({ m, y0: m.position.y, ph: i * 2.1 });
+  }));
+
   const state = { rz: 0, rx: 0, cz: 15, px: 0, py: 0, tx: 0, ty: 0, active: 0, tActive: 0 };
   function layout() {
     const w = hero.clientWidth, hgt = hero.clientHeight;
@@ -891,6 +929,8 @@ function heroScene() {
     pendant.rotation.y = t * .6;
     near.rotation.y = t * .025; near.position.x = state.px * .9; near.position.y = Math.sin(t * .2) * .4 + state.py * .6;
     far.rotation.y = -t * .012; far.position.x = state.px * .3;
+    cardBodies.forEach(b => { b.m.position.y = b.y0 + Math.sin(t * .35 + b.ph) * .35; });
+    cards.position.set(state.px * .8, state.py * .5 + state.rz * 2.4, 0);
     camera.position.z = state.cz; camera.position.x = Math.sin(t * .11) * .25;
   }
   function draw() { renderer.render(scene, camera); }
@@ -1012,6 +1052,12 @@ function bgScene() {
   scene.add(field);
   const dust = flakes(mobile ? 160 : 380); dust.material.size = .1; dust.material.opacity = .55;
   scene.add(dust);
+  const photoBodies = [];
+  (CONFIG.stills || []).slice(0, mobile ? 4 : 7).forEach(st => photoTexture(st.src, (tex, asp) => {
+    const m = photoPlane(tex, asp, rnd(3, 4.6), .62);
+    m.position.set(rnd(-15, 15), rnd(-9, 9), rnd(-9, -1)); m.rotation.set(rnd(-.2, .2), rnd(-.5, .5), rnd(-.1, .1));
+    field.add(m); photoBodies.push({ m, y0: m.position.y, ph: Math.random() * 6.28, vy: rnd(-.03, .03) });
+  }));
 
   const state = { px: 0, py: 0, tx: 0, ty: 0 };
   function layout() {
@@ -1026,6 +1072,7 @@ function bgScene() {
     const t = (now - t0) / 1000, sy = (scrollY || 0) * .0022;
     state.px += (state.tx - state.px) * .03; state.py += (state.ty - state.py) * .03;
     bodies.forEach((b, i) => { b.m.rotation.x += b.vx * .016; b.m.rotation.y += b.vy * .016; b.m.rotation.z += b.vz * .016; b.m.position.y = b.y0 + Math.sin(t * .15 + i) * .6; });
+    photoBodies.forEach(b => { b.m.position.y = b.y0 + Math.sin(t * .12 + b.ph) * .5; b.m.rotation.y += b.vy * .016; });
     field.position.set(state.px * 1.2, sy + state.py * .8, 0);       // the field drifts up as the page scrolls
     dust.rotation.y = t * .015; dust.position.y = sy * .6 + Math.sin(t * .1) * .3;
     camera.position.x = Math.sin(t * .05) * .6;
