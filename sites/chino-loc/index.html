@@ -146,6 +146,21 @@ td a{color:var(--ice)}
 .reveal-box code{font:500 16px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg);user-select:all;-webkit-user-select:all;word-break:break-all}
 .reveal-box .status{font-size:13px;color:var(--ice);min-width:0}
 
+/* stills: blue duotone frames from the videos */
+.still{position:relative;overflow:hidden;background:var(--bg-2);border:1px solid var(--line);aspect-ratio:4/5;min-width:0}
+.still img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 30%);display:block;filter:grayscale(1) contrast(1.06) brightness(1.1)}
+.still::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,var(--accent) 0%,#0b1a3a 100%);mix-blend-mode:color;opacity:.85;pointer-events:none}
+.still figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;font:600 11px/1.3 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ice);background:linear-gradient(180deg,rgba(6,9,18,0),rgba(6,9,18,.85));z-index:1}
+.stills{padding-block:0 clamp(56px,9vw,112px)}
+.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;-webkit-overflow-scrolling:touch}
+.strip .still{flex:0 0 clamp(200px,22vw,280px);scroll-snap-align:start;transition:transform .25s ease}
+.strip .still:hover{transform:translateY(-4px)}
+.strip figure{margin:0}
+@media (max-width:720px){.strip .still{flex-basis:64vw}}
+.collage{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.collage .still:nth-child(2){margin-top:36px}
+.collage figure{margin:0}
+
 /* story */
 .story .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start}
 .story blockquote{margin:0;font-family:var(--display);font-size:clamp(32px,4.4vw,54px);line-height:1.08;color:var(--fg)}
@@ -238,6 +253,16 @@ footer p a{color:var(--muted)}
     </div>
   </section>
 
+  <section class="stills" id="stills" aria-label="Stills from the videos">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow">On camera</p>
+        <h2>Stills</h2>
+      </div>
+      <div class="strip" id="strip"></div>
+    </div>
+  </section>
+
   <section id="music">
     <div class="wrap">
       <div class="sec-head" data-reveal>
@@ -288,6 +313,7 @@ footer p a{color:var(--muted)}
       <div data-reveal>
         <p class="eyebrow" id="storyEyebrow">Story</p>
         <blockquote>A new chapter with Shift The Culture.</blockquote>
+        <div class="collage" id="collage"></div>
       </div>
       <div class="copy" data-reveal>
         <p class="lede">Chino Loc arrives with a sound of his own and a team built to take it everywhere. The first chapter starts with the debut single and the visuals behind it. Everything after that lands here.</p>
@@ -387,6 +413,17 @@ const CONFIG = {
     { title: "Dat Meskin Down Souf2", credit: "Young Clean × Chino Loc", year: "2022", kind: "appears", url: "https://open.spotify.com/album/4dazCOjwRcvA9RVYnIONrd", art: "art/4dazCOjwRcvA9RVYnIONrd.jpg" },
     { title: "Hurry up and Buy Music Group, Vol. One", credit: "Various Artists · with Chino Loc", year: "2020", kind: "appears", url: "https://open.spotify.com/album/2EV5rkIVu7qRJCVfsMRKz1", art: "art/2EV5rkIVu7qRJCVfsMRKz1.jpg" },
     { title: "Against the Grain", credit: "Chino Loc", year: "2020", kind: "release", url: "https://open.spotify.com/album/1NiOvOdrod0muCZd1vsOOt", art: "art/1NiOvOdrod0muCZd1vsOOt.jpg" }
+  ],
+  stills: [                                              // frames from his videos, blue duotone via CSS; pos = object-position
+    { src: "art/stills/01.jpg", from: "84s Pokin Out", pos: "50% 20%" },
+    { src: "art/stills/03.jpg", from: "Risk Taker",    pos: "50% 40%", story: true },
+    { src: "art/stills/02.jpg", from: "84s Pokin Out", pos: "55% 25%", story: true },
+    { src: "art/stills/06.jpg", from: "Look Like Money", pos: "50% 30%" },
+    { src: "art/stills/05.jpg", from: "Risk Taker",    pos: "50% 35%" },
+    { src: "art/stills/07.jpg", from: "Juno",          pos: "40% 30%" },
+    { src: "art/stills/04.jpg", from: "84s Pokin Out", pos: "45% 35%" },
+    { src: "art/stills/08.jpg", from: "Risk Taker",    pos: "50% 45%" },
+    { src: "art/stills/09.jpg", from: "84s Pokin Out", pos: "50% 30%" }
   ],
   videos: [
     { title: "84s Pokin Out (ft. E.S.G)", note: "Official video", url: "https://www.youtube.com/watch?v=UlfKmnCxudk", thumb: "art/yt-UlfKmnCxudk.jpg", seed: 11 }, // VERIFIED (his bio link)
@@ -488,6 +525,11 @@ function render() {
       ${soonPill(v.url)}
       <div class="meta"><strong>${esc(v.title)}</strong><span>${esc(v.note || "")}</span></div>
     </a>`).join("");
+
+  const still = (s, i) => `<figure class="still" style="--pos:${esc(s.pos || "50% 30%")}"><img src="${esc(s.src)}" width="1200" height="900" loading="${i < 3 ? "eager" : "lazy"}" decoding="async" alt="${esc(CONFIG.artist)}, still from ${esc(s.from)}"><figcaption>${esc(s.from)}</figcaption></figure>`;
+  $("#strip").innerHTML = CONFIG.stills.map(still).join("");
+  $("#collage").innerHTML = CONFIG.stills.filter(s => s.story).slice(0, 2).map(still).join("");
+  if (!CONFIG.stills.length) { $("#stills").hidden = true; $("#collage").hidden = true; }
 
   const real = CONFIG.catalog.filter(r => r.art).length;
   if (real) $("#catalogNote").textContent = `${real} release${real === 1 ? "" : "s"} on Spotify. More as drops land.`;
